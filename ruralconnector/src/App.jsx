@@ -19,6 +19,7 @@ import './App.css'
 import HomePage   from './pages/HomePage'
 import DoctorPage from './pages/DoctorPage'
 import HospitalsPage from './pages/HospitalsPage'
+import VideoCallPage from './pages/VideoCallPage'
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path="/"       element={<HomePage />}   />
           <Route path="/doctor" element={<DoctorPage />} />
           <Route path="/hospitals" element={<HospitalsPage />} />
+          <Route path="/videocall" element={<VideoCallPage />} />
         </Routes>
       </div>
     </BrowserRouter>

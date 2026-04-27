@@ -87,10 +87,21 @@ export default function HospitalsPage() {
   // Search state for doctors
   const [doctorSearchQuery, setDoctorSearchQuery] = useState('');
 
+  // Booking state
+  const [bookingDoctor, setBookingDoctor] = useState(null);
+  const [selectedSlot, setSelectedSlot] = useState(null);
+  const [bookingStatus, setBookingStatus] = useState(''); // 'slot_selection', 'confirmed'
+
   // --- Handlers ---
   const handleCategorySelect = (cat) => {
     setCategory(cat);
     setView('subcategories');
+  };
+
+  const openBooking = (doc) => {
+    setBookingDoctor(doc);
+    setSelectedSlot(null);
+    setBookingStatus('slot_selection');
   };
 
   const handleFilterSelect = (val) => {
@@ -281,7 +292,7 @@ export default function HospitalsPage() {
                   ? <span className="status-badge available">🟢 Available</span>
                   : <span className="status-badge busy">🔴 Busy</span>
                 }
-                <button className="book-btn" disabled={!doc.available}>Book Now</button>
+                <button className="book-btn" disabled={!doc.available} onClick={() => openBooking(doc)}>Book Now</button>
               </div>
             </div>
           ))
@@ -290,9 +301,56 @@ export default function HospitalsPage() {
     </div>
   );
 
+  const renderBookingModal = () => {
+    if (!bookingDoctor) return null;
+
+    return (
+      <div className="modal-overlay">
+        <div className="modal-content animate-fade-in">
+          <button className="close-modal" onClick={() => setBookingDoctor(null)}>✕</button>
+          
+          {bookingStatus === 'slot_selection' ? (
+            <>
+              <h3>Book Appointment</h3>
+              <p className="modal-subtitle">with <strong>{bookingDoctor.name}</strong> ({bookingDoctor.specialty})</p>
+              <div className="slots-grid">
+                {["10:00 AM", "11:30 AM", "02:00 PM", "04:15 PM", "06:00 PM"].map(slot => (
+                  <button 
+                    key={slot} 
+                    className={`slot-btn ${selectedSlot === slot ? 'selected' : ''}`}
+                    onClick={() => setSelectedSlot(slot)}
+                  >
+                    {slot}
+                  </button>
+                ))}
+              </div>
+              <button 
+                className="confirm-btn" 
+                disabled={!selectedSlot}
+                onClick={() => setBookingStatus('confirmed')}
+              >
+                Confirm Booking
+              </button>
+            </>
+          ) : (
+            <div className="confirmation-success">
+              <div className="success-icon">✅</div>
+              <h3>Booking Confirmed!</h3>
+              <p>Your slot is confirmed for <strong>{selectedSlot}</strong> today.</p>
+              <button className="video-call-btn" onClick={() => navigate('/videocall')}>
+                📹 Join Video Call
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   // --- Main Render ---
   return (
     <div className="hospitals-page">
+      {renderBookingModal()}
       {/* Header */}
       <header className="page-header">
         <button className="back-button" onClick={goBack}>

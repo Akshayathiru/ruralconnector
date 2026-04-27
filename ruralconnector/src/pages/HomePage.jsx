@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './HomePage.css';
+import { translations } from '../translations';
 
 function HomePage() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+  
+  // Get selected language from localStorage, default to English
+  const [lang, setLang] = useState(localStorage.getItem('userLanguage') || 'en')
+  const t = translations[lang] || translations.en
 
   return (
     <div className="dashboard-container">
@@ -15,8 +20,8 @@ function HomePage() {
               <span>+</span>
             </div>
             <div>
-              <h2 className="brand-title">Rural Healthcare</h2>
-              <span className="brand-subtitle">Connect</span>
+              <h2 className="brand-title">{t.welcome.split(' ')[0]}</h2>
+              <span className="brand-subtitle">{t.welcome.split(' ').slice(1).join(' ')}</span>
             </div>
           </div>
         </div>
@@ -28,23 +33,23 @@ function HomePage() {
           </a>
           <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/hospitals'); }}>
             <span className="nav-icon">🏥</span>
-            Nearby Hospitals
+            {t.hospitals}
+          </a>
+          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/medicine'); }}>
+            <span className="nav-icon">💊</span>
+            {t.medicine}
           </a>
           <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); alert('Coming soon!'); }}>
-            <span className="nav-icon">💊</span>
-            Medicine Availability
-          </a>
-          <a href="#" className="nav-item">
             <span className="nav-icon">🩺</span>
-            Health Services
+            {t.asha}
           </a>
-          <a href="#" className="nav-item">
+          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); alert('Coming soon!'); }}>
             <span className="nav-icon">📖</span>
-            Health Tips
+            {t.symptoms}
           </a>
-          <a href="#" className="nav-item">
+          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); alert('Coming soon!'); }}>
             <span className="nav-icon">📞</span>
-            Emergency
+            {t.voice}
           </a>
           <a href="#" className="nav-item">
             <span className="nav-icon">ℹ️</span>
@@ -53,10 +58,10 @@ function HomePage() {
         </nav>
 
         <div className="sidebar-help">
-          <h3>Need Help?</h3>
-          <p>Our support team is available to assist you.</p>
-          <button className="contact-btn">
-            🎧 Contact Support
+          <h3>Change Language</h3>
+          <p>Select another language for the portal.</p>
+          <button className="contact-btn" onClick={() => navigate('/')}>
+             🌐 {t.select_lang}
           </button>
         </div>
       </aside>
@@ -94,18 +99,17 @@ function HomePage() {
                 <span className="badge-icon">✓</span> Your Health, Our Priority
               </div>
               <h1 className="hero-title">
-                Rural Healthcare<br />
-                <span className="highlight">Connect</span>
+                {t.welcome}
               </h1>
               <p className="hero-desc">
-                Access healthcare services, check availability, and get connected with trusted medical support in your area.
+                {t.subtitle}
               </p>
               <div className="hero-buttons">
                 <button className="btn-primary" onClick={() => navigate('/hospitals')}>
-                  🏥 Find Nearby Hospitals
+                  🏥 {t.hospitals}
                 </button>
-                <button className="btn-secondary" onClick={() => alert('Coming soon!')}>
-                  💊 Check Medicine Availability
+                <button className="btn-secondary" onClick={() => navigate('/medicine')}>
+                  💊 {t.medicine}
                 </button>
               </div>
             </div>
@@ -124,13 +128,13 @@ function HomePage() {
           </div>
 
           {/* HELP SECTION */}
-          <h2 className="section-title">How can we help you today?</h2>
+          <h2 className="section-title">{t.select_lang}</h2>
           <div className="services-grid">
             <div className="service-card" onClick={() => navigate('/hospitals')}>
               <div className="service-icon icon-purple">🏥</div>
               <div className="service-info">
-                <h3>Nearby Hospitals</h3>
-                <p>Find hospitals by location, symptoms, or age</p>
+                <h3>{t.hospitals}</h3>
+                <p>{t.hospitals_desc}</p>
               </div>
               <div className="service-arrow">→</div>
             </div>
@@ -138,26 +142,26 @@ function HomePage() {
             <div className="service-card" onClick={() => navigate('/medicine')}>
               <div className="service-icon icon-green">💊</div>
               <div className="service-info">
-                <h3>Medicine Availability</h3>
-                <p>Check medicine availability at nearby pharmacies</p>
+                <h3>{t.medicine}</h3>
+                <p>{t.medicine_desc}</p>
               </div>
               <div className="service-arrow">→</div>
             </div>
             
-            <div className="service-card">
+            <div className="service-card" onClick={() => alert('Coming soon!')}>
               <div className="service-icon icon-pink">❤️</div>
               <div className="service-info">
-                <h3>Health Services</h3>
-                <p>Explore various healthcare services</p>
+                <h3>{t.symptoms}</h3>
+                <p>{t.symptoms_desc}</p>
               </div>
               <div className="service-arrow">→</div>
             </div>
             
-            <div className="service-card">
+            <div className="service-card" onClick={() => alert('Coming soon!')}>
               <div className="service-icon icon-orange">📞</div>
               <div className="service-info">
-                <h3>Emergency Support</h3>
-                <p>Get immediate help in emergency situations</p>
+                <h3>{t.voice}</h3>
+                <p>{t.voice_desc}</p>
               </div>
               <div className="service-arrow">→</div>
             </div>

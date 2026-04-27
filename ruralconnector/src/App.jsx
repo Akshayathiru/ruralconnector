@@ -21,6 +21,7 @@ import DoctorPage from './pages/DoctorPage'
 import HospitalsPage from './pages/HospitalsPage'
 import VideoCallPage from './pages/VideoCallPage'
 import MedicinePage from './pages/MedicinePage'
+import LanguageSelectionPage from './pages/LanguageSelectionPage'
 
 function App() {
   return (
@@ -33,7 +34,8 @@ function App() {
           path="/doctor"  → doctor availability page
         */}
         <Routes>
-          <Route path="/"       element={<HomePage />}   />
+          <Route path="/"       element={<LanguageSelectionPage />} />
+          <Route path="/dashboard" element={<HomePage />} />
           <Route path="/doctor" element={<DoctorPage />} />
           <Route path="/hospitals" element={<HospitalsPage />} />
           <Route path="/videocall" element={<VideoCallPage />} />

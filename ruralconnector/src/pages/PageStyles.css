@@ -8,7 +8,7 @@
       This is the DRY principle: Don't Repeat Yourself.
    ═══════════════════════════════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 /* ── Variables ── */
 :root {
@@ -28,7 +28,7 @@
   --shadow-sm:    0 1px 3px rgba(0,0,0,0.08);
   --shadow-md:    0 4px 16px rgba(13,148,136,0.12);
   --radius:       14px;
-  --font:         'Outfit', system-ui, sans-serif;
+  --font:         'Inter', system-ui, sans-serif;
 }
 
 /* ── Keyframes ── */

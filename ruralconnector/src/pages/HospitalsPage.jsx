@@ -337,7 +337,7 @@ export default function HospitalsPage() {
               <div className="success-icon">✅</div>
               <h3>Booking Confirmed!</h3>
               <p>Your slot is confirmed for <strong>{selectedSlot}</strong> today.</p>
-              <button className="video-call-btn" onClick={() => navigate('/videocall')}>
+              <button className="video-call-btn" onClick={() => navigate('/videocall', { state: { doctorName: bookingDoctor.name } })}>
                 📹 Join Video Call
               </button>
             </div>

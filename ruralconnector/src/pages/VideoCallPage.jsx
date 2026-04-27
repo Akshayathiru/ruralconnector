@@ -1,14 +1,75 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './VideoCallPage.css';
 
 export default function VideoCallPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const doctorName = location.state?.doctorName || "Doctor"; // Fallback if no state
+
   const [isMuted, setIsMuted] = useState(false);
   const [isVideoOff, setIsVideoOff] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(true);
 
+  // Reference for the local video element
+  const userVideoRef = useRef(null);
+  // Store the MediaStream
+  const [stream, setStream] = useState(null);
+
+  useEffect(() => {
+    // 1. Simulate connecting to the doctor
+    const timer = setTimeout(() => {
+      setIsConnecting(false);
+    }, 3500); // 3.5 seconds connecting time
+
+    // 2. Request real webcam access
+    let userStream;
+    const getMedia = async () => {
+      try {
+        userStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        setStream(userStream);
+        if (userVideoRef.current) {
+          userVideoRef.current.srcObject = userStream;
+        }
+      } catch (err) {
+        console.error("Failed to access webcam:", err);
+      }
+    };
+
+    getMedia();
+
+    // Cleanup: stop tracks when unmounting so the camera light turns off
+    return () => {
+      clearTimeout(timer);
+      if (userStream) {
+        userStream.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, []);
+
+  // Handle mute toggling on the actual stream
+  useEffect(() => {
+    if (stream) {
+      stream.getAudioTracks().forEach(track => {
+        track.enabled = !isMuted;
+      });
+    }
+  }, [isMuted, stream]);
+
+  // Handle video toggling on the actual stream
+  useEffect(() => {
+    if (stream) {
+      stream.getVideoTracks().forEach(track => {
+        track.enabled = !isVideoOff;
+      });
+    }
+  }, [isVideoOff, stream]);
+
+  // Handle ending the call
   const endCall = () => {
-    // Navigate back to hospitals page or home
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop());
+    }
     navigate(-1);
   };
 
@@ -16,26 +77,38 @@ export default function VideoCallPage() {
     <div className="video-call-container">
       {/* Main Doctor Video Area */}
       <div className="main-video">
-        <img 
-          src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=1000" 
-          alt="Doctor Video Stream" 
-          className="video-feed" 
-        />
-        <div className="doctor-info-overlay">
-          <h2>Dr. Raj Kumar</h2>
-          <p>02:14</p>
-        </div>
+        {isConnecting ? (
+          <div className="connecting-overlay">
+            <div className="spinner"></div>
+            <h2>Connecting to {doctorName}...</h2>
+            <p>Please wait while we establish a secure connection.</p>
+          </div>
+        ) : (
+          <>
+            <img 
+              src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=1000" 
+              alt="Doctor Video Stream" 
+              className="video-feed" 
+            />
+            <div className="doctor-info-overlay animate-fade-in">
+              <h2>{doctorName}</h2>
+              <p>00:14</p>
+            </div>
+          </>
+        )}
       </div>
 
-      {/* Patient PIP (Picture-in-Picture) Area */}
+      {/* Patient PIP (Picture-in-Picture) Area (Actual Webcam) */}
       <div className={`pip-video ${isVideoOff ? 'video-off' : ''}`}>
         {isVideoOff ? (
           <div className="avatar-placeholder">A</div>
         ) : (
-          <img 
-            src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=400" 
-            alt="Your Video Stream" 
-            className="video-feed" 
+          <video 
+            ref={userVideoRef}
+            autoPlay 
+            playsInline 
+            muted /* Mute local video to prevent echo */
+            className="video-feed mirror-video" 
           />
         )}
         <span className="you-label">You</span>

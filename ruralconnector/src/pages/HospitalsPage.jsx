@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './HospitalsPage.css';
 
-// --- MOCK DATA ---
+// --- EXPANDED MOCK DATA ---
 const MOCK_HOSPITALS = [
   {
     id: 1,
@@ -11,6 +11,8 @@ const MOCK_HOSPITALS = [
     distanceValue: 3,
     location: "Chennai Central",
     rating: 4.8,
+    doctorsCount: "85+",
+    insurance: "Cashless",
     symptoms: ["Fever", "Cough", "General"],
     ages: ["0-4 yrs", "5-15 yrs", "16-18 yrs", "Above 18"],
     image: "🏥"
@@ -22,6 +24,8 @@ const MOCK_HOSPITALS = [
     distanceValue: 8,
     location: "Chennai South",
     rating: 4.9,
+    doctorsCount: "40+",
+    insurance: "All Major",
     symptoms: ["Fever", "Baby Care", "Vaccination"],
     ages: ["0-4 yrs", "5-15 yrs"],
     image: "🧸"
@@ -33,6 +37,8 @@ const MOCK_HOSPITALS = [
     distanceValue: 36,
     location: "Chennai West",
     rating: 4.7,
+    doctorsCount: "60+",
+    insurance: "Cashless",
     symptoms: ["Infertility", "Maternity", "Women's Health"],
     ages: ["Above 18"],
     image: "🌸"
@@ -44,6 +50,8 @@ const MOCK_HOSPITALS = [
     distanceValue: 12,
     location: "Chennai North",
     rating: 4.5,
+    doctorsCount: "120+",
+    insurance: "Cashless",
     symptoms: ["Fever", "Orthopedics", "Cardiology"],
     ages: ["16-18 yrs", "Above 18"],
     image: "🩺"
@@ -55,33 +63,81 @@ const MOCK_HOSPITALS = [
     distanceValue: 50,
     location: "Chennai Outskirts",
     rating: 4.6,
+    doctorsCount: "35+",
+    insurance: "Partial",
     symptoms: ["Infertility"],
     ages: ["Above 18"],
     image: "👶"
+  },
+  {
+    id: 6,
+    name: "Sunrise Orthopedic Center",
+    distance: "18km",
+    distanceValue: 18,
+    location: "Chennai East",
+    rating: 4.8,
+    doctorsCount: "45+",
+    insurance: "Cashless",
+    symptoms: ["Orthopedics", "Bone Joint"],
+    ages: ["16-18 yrs", "Above 18"],
+    image: "🦴"
+  },
+  {
+    id: 7,
+    name: "Global Heart Institute",
+    distance: "25km",
+    distanceValue: 25,
+    location: "Chennai Metro",
+    rating: 4.9,
+    doctorsCount: "150+",
+    insurance: "All Major",
+    symptoms: ["Cardiology", "Heart", "Emergency"],
+    ages: ["16-18 yrs", "Above 18"],
+    image: "❤️"
+  },
+  {
+    id: 8,
+    name: "Rural Health Mission Clinic",
+    distance: "2km",
+    distanceValue: 2,
+    location: "Village Center",
+    rating: 4.3,
+    doctorsCount: "12+",
+    insurance: "Free/Govt",
+    symptoms: ["Fever", "General", "First Aid"],
+    ages: ["0-4 yrs", "5-15 yrs", "16-18 yrs", "Above 18"],
+    image: "🚑"
   }
 ];
 
 const MOCK_DOCTORS = [
-  { id: 101, hospitalId: 1, name: "Dr. Raj Kumar", specialty: "General Physician", tags: ["fever", "cough", "general"], available: true, experience: "15 yrs" },
-  { id: 102, hospitalId: 1, name: "Dr. Anitha", specialty: "Cardiologist", tags: ["heart", "chest pain"], available: false, experience: "10 yrs" },
-  { id: 103, hospitalId: 2, name: "Dr. Smitha", specialty: "Pediatrician", tags: ["baby doctor", "child care", "fever"], available: true, experience: "8 yrs" },
-  { id: 104, hospitalId: 2, name: "Dr. John", specialty: "Pediatric Surgeon", tags: ["baby doctor", "surgery"], available: true, experience: "12 yrs" },
-  { id: 105, hospitalId: 3, name: "Dr. Priya", specialty: "Gynecologist", tags: ["infertility", "pregnancy", "women"], available: true, experience: "20 yrs" },
-  { id: 106, hospitalId: 3, name: "Dr. Lakshmi", specialty: "IVF Specialist", tags: ["infertility", "ivf"], available: true, experience: "18 yrs" },
-  { id: 107, hospitalId: 4, name: "Dr. Arun", specialty: "Orthopedics", tags: ["bones", "joints", "fracture"], available: true, experience: "22 yrs" },
-  { id: 108, hospitalId: 5, name: "Dr. Ramesh", specialty: "Fertility Expert", tags: ["infertility", "ivf"], available: true, experience: "14 yrs" }
+  { id: 101, hospitalId: 1, name: "Dr. Raj Kumar", specialty: "General Physician", tags: ["fever", "cough", "general"], available: true, experience: "15 yrs", rating: "4.9", time: "09:00 AM - 04:00 PM" },
+  { id: 102, hospitalId: 1, name: "Dr. Anitha", specialty: "Cardiologist", tags: ["heart", "chest pain"], available: false, experience: "10 yrs", rating: "4.7", time: "Not available today" },
+  { id: 113, hospitalId: 1, name: "Dr. Suresh Reddy", specialty: "Orthopedic", tags: ["bones", "joints"], available: true, experience: "12 yrs", rating: "4.8", time: "10:00 AM - 02:00 PM" },
+  { id: 114, hospitalId: 1, name: "Dr. Kavya Iyer", specialty: "Pediatrician", tags: ["baby doctor", "fever"], available: true, experience: "8 yrs", rating: "4.9", time: "11:00 AM - 05:00 PM" },
+  { id: 115, hospitalId: 1, name: "Dr. Mohammed Ali", specialty: "Neurologist", tags: ["brain", "nerves"], available: false, experience: "20 yrs", rating: "5.0", time: "Not available today" },
+  { id: 116, hospitalId: 1, name: "Dr. Deepa Nair", specialty: "Dermatologist", tags: ["skin", "allergies"], available: true, experience: "6 yrs", rating: "4.6", time: "01:00 PM - 06:00 PM" },
+  { id: 103, hospitalId: 2, name: "Dr. Smitha", specialty: "Pediatrician", tags: ["baby doctor", "child care", "fever"], available: true, experience: "8 yrs", rating: "4.8", time: "10:00 AM - 02:00 PM" },
+  { id: 104, hospitalId: 2, name: "Dr. John", specialty: "Pediatric Surgeon", tags: ["baby doctor", "surgery"], available: true, experience: "12 yrs", rating: "4.9", time: "11:00 AM - 05:00 PM" },
+  { id: 105, hospitalId: 3, name: "Dr. Priya Sharma", specialty: "Gynecologist", tags: ["infertility", "pregnancy", "women"], available: true, experience: "20 yrs", rating: "5.0", time: "10:00 AM - 01:00 PM" },
+  { id: 106, hospitalId: 3, name: "Dr. Lakshmi", specialty: "IVF Specialist", tags: ["infertility", "ivf"], available: true, experience: "18 yrs", rating: "4.8", time: "02:00 PM - 06:00 PM" },
+  { id: 107, hospitalId: 4, name: "Dr. Arun", specialty: "Orthopedics", tags: ["bones", "joints", "fracture"], available: true, experience: "22 yrs", rating: "4.9", time: "09:00 AM - 03:00 PM" },
+  { id: 108, hospitalId: 4, name: "Dr. Sunita Rao", specialty: "Orthopedic Surgeon", tags: ["surgery", "bones"], available: true, experience: "14 yrs", rating: "4.7", time: "02:00 PM - 05:00 PM" },
+  { id: 109, hospitalId: 5, name: "Dr. Ramesh Patel", specialty: "Fertility Expert", tags: ["infertility", "ivf"], available: false, experience: "14 yrs", rating: "4.6", time: "Not available today" },
+  { id: 110, hospitalId: 6, name: "Dr. Anil Verma", specialty: "Surgeon", tags: ["surgery", "bones"], available: true, experience: "18 yrs", rating: "4.8", time: "11:00 AM - 03:00 PM" },
+  { id: 111, hospitalId: 7, name: "Dr. Vikram Singh", specialty: "Cardiologist", tags: ["heart", "surgery"], available: true, experience: "25 yrs", rating: "5.0", time: "09:00 AM - 05:00 PM" },
+  { id: 112, hospitalId: 8, name: "Dr. Meena", specialty: "General Physician", tags: ["fever", "cough"], available: true, experience: "5 yrs", rating: "4.5", time: "24/7 Available" }
 ];
 
 export default function HospitalsPage() {
   const navigate = useNavigate();
   
   // State for navigation flow
-  // views: 'categories' -> 'subcategories' -> 'hospitals' -> 'hospital_detail'
   const [view, setView] = useState('categories');
   
   // Selections
-  const [category, setCategory] = useState(null); // 'location', 'symptoms', 'age'
-  const [filterValue, setFilterValue] = useState(null); // e.g., '5km', 'Infertility', '0-4 yrs'
+  const [category, setCategory] = useState(null); 
+  const [filterValue, setFilterValue] = useState(null); 
   const [selectedHospital, setSelectedHospital] = useState(null);
   
   // Search state for doctors
@@ -111,7 +167,7 @@ export default function HospitalsPage() {
 
   const handleHospitalSelect = (hospital) => {
     setSelectedHospital(hospital);
-    setDoctorSearchQuery(''); // reset search
+    setDoctorSearchQuery(''); 
     setView('hospital_detail');
   };
 
@@ -126,7 +182,7 @@ export default function HospitalsPage() {
   let filteredHospitals = [];
   if (view === 'hospitals') {
     if (category === 'location') {
-      const maxDist = parseInt(filterValue); // e.g. "5km" -> 5
+      const maxDist = parseInt(filterValue); 
       filteredHospitals = MOCK_HOSPITALS.filter(h => h.distanceValue <= maxDist);
     } else if (category === 'symptoms') {
       filteredHospitals = MOCK_HOSPITALS.filter(h => h.symptoms.includes(filterValue));
@@ -153,17 +209,17 @@ export default function HospitalsPage() {
   const renderCategories = () => (
     <div className="grid-container animate-fade-in">
       <div className="category-card" onClick={() => handleCategorySelect('location')}>
-        <div className="icon bg-blue">📍</div>
+        <div className="icon-wrapper purple-glow">📍</div>
         <h3>Based on Location</h3>
         <p>Find hospitals within 5km, 10km, etc.</p>
       </div>
       <div className="category-card" onClick={() => handleCategorySelect('symptoms')}>
-        <div className="icon bg-pink">🩺</div>
+        <div className="icon-wrapper purple-glow">🩺</div>
         <h3>Based on Problems</h3>
         <p>Search by symptoms like Infertility, Fever, etc.</p>
       </div>
       <div className="category-card" onClick={() => handleCategorySelect('age')}>
-        <div className="icon bg-green">👶</div>
+        <div className="icon-wrapper purple-glow">👶</div>
         <h3>Based on Age</h3>
         <p>Filter hospitals that treat babies, adults, etc.</p>
       </div>
@@ -212,30 +268,76 @@ export default function HospitalsPage() {
   };
 
   const renderHospitals = () => (
-    <div className="sub-container animate-fade-in">
-      <h2 className="sub-title">
-        Hospitals matching: <span className="highlight-badge">{filterValue}</span>
-      </h2>
+    <div className="hospitals-list-view animate-fade-in">
+      
+      {/* Search & Filter Bar */}
+      <div className="filter-bar">
+        <div className="search-input-wrapper">
+          <span className="search-icon">🔍</span>
+          <input type="text" placeholder="Search by hospital name, speciality..." />
+        </div>
+        <select className="filter-select"><option>Speciality</option></select>
+        <select className="filter-select"><option>Distance</option></select>
+        <select className="filter-select"><option>Insurance</option></select>
+        <button className="apply-filters-btn">⚡ Apply Filters</button>
+      </div>
+
+      <div className="results-header">
+        <h2>Hospitals matching: <span className="highlight-tag">{filterValue} <span className="close-tag">✕</span></span></h2>
+        <span className="results-count">🏥 {filteredHospitals.length} Hospital(s) found</span>
+      </div>
+
       {filteredHospitals.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-icon">🏜️</div>
           <p>No hospitals found for this criteria.</p>
         </div>
       ) : (
-        <div className="hospital-grid">
+        <div className="hospital-cards-vertical">
           {filteredHospitals.map(h => (
-            <div key={h.id} className="hospital-card" onClick={() => handleHospitalSelect(h)}>
-              <div className="h-card-header">
-                <span className="h-icon">{h.image}</span>
-                <span className="h-distance">{h.distance} away</span>
+            <div key={h.id} className="premium-hospital-card">
+              <div className="ph-top">
+                <div className="ph-icon-area">
+                  <div className="ph-icon-box">{h.image}</div>
+                  <div className="ph-verified">✓</div>
+                </div>
+                <div className="ph-info">
+                  <h3>{h.name}</h3>
+                  <p className="ph-loc">📍 {h.location}</p>
+                  <div className="ph-tags">
+                    {h.symptoms.slice(0,2).map(s => <span key={s} className="tag tag-soft-purple">{s}</span>)}
+                    {h.ages.slice(0,1).map(a => <span key={a} className="tag tag-soft-green">{a}</span>)}
+                  </div>
+                </div>
+                <div className="ph-distance-badge">
+                  {h.distance} away
+                </div>
               </div>
-              <h3 className="h-name">{h.name}</h3>
-              <p className="h-loc">📍 {h.location}</p>
-              <div className="h-tags">
-                {h.symptoms.slice(0,2).map(s => <span key={s} className="tag tag-blue">{s}</span>)}
-                {h.ages.slice(0,1).map(a => <span key={a} className="tag tag-green">{a}</span>)}
+              
+              <div className="ph-divider"></div>
+              
+              <div className="ph-bottom">
+                <div className="ph-stats">
+                  <div className="stat">
+                    <span className="stat-icon">⏰</span>
+                    <div><strong>24/7</strong><span>Emergency</span></div>
+                  </div>
+                  <div className="stat">
+                    <span className="stat-icon">👨‍⚕️</span>
+                    <div><strong>{h.doctorsCount}</strong><span>Doctors</span></div>
+                  </div>
+                  <div className="stat">
+                    <span className="stat-icon">⭐</span>
+                    <div><strong>{h.rating}</strong><span>Patient Rating</span></div>
+                  </div>
+                  <div className="stat">
+                    <span className="stat-icon">🛡️</span>
+                    <div><strong>{h.insurance}</strong><span>Insurance</span></div>
+                  </div>
+                </div>
+                <button className="ph-view-btn" onClick={() => handleHospitalSelect(h)}>
+                  View Doctors →
+                </button>
               </div>
-              <button className="view-btn">View Doctors</button>
             </div>
           ))}
         </div>
@@ -245,58 +347,64 @@ export default function HospitalsPage() {
 
   const renderHospitalDetail = () => (
     <div className="detail-container animate-fade-in">
-      {/* Hospital Banner */}
-      <div className="detail-banner">
-        <div className="d-icon">{selectedHospital.image}</div>
-        <div className="d-info">
-          <h2>{selectedHospital.name}</h2>
-          <p>📍 {selectedHospital.location} • 🚗 {selectedHospital.distance} away</p>
-          <div className="d-rating">⭐ {selectedHospital.rating} / 5.0</div>
-        </div>
-      </div>
-
-      {/* Doctor Search */}
-      <div className="doctor-search-box">
-        <h3>Available Doctors</h3>
-        <div className="search-input-wrapper">
-          <span className="search-icon">🔍</span>
-          <input 
-            type="text" 
-            placeholder="Search e.g., 'baby doctors', 'fever', 'specialist name'..."
-            value={doctorSearchQuery}
-            onChange={(e) => setDoctorSearchQuery(e.target.value)}
-            className="doctor-search-input"
-          />
-        </div>
-      </div>
-
-      {/* Doctor List */}
-      <div className="doctors-list">
-        {filteredDoctors.length === 0 ? (
-          <div className="empty-state small">
-            <p>No doctors found matching "{doctorSearchQuery}"</p>
+      {/* Dashboard Style Header */}
+      <div className="detail-dashboard-header">
+        <div className="dd-text">
+          <h2>Doctor Availability</h2>
+          <p>Find doctors available near your village — updated daily</p>
+          <div className="dd-tabs">
+            <button className="dd-tab active">👥 All Doctors ({filteredDoctors.length})</button>
+            <button className="dd-tab">✅ Available Now ({filteredDoctors.filter(d => d.available).length})</button>
           </div>
-        ) : (
-          filteredDoctors.map(doc => (
-            <div key={doc.id} className="doctor-card">
-              <div className="doc-avatar">👨‍⚕️</div>
-              <div className="doc-details">
-                <h4>{doc.name}</h4>
-                <p className="doc-spec">{doc.specialty} • {doc.experience}</p>
-                <div className="doc-tags">
-                  {doc.tags.map(t => <span key={t} className="tag tag-outline">#{t}</span>)}
-                </div>
-              </div>
-              <div className="doc-status">
-                {doc.available 
-                  ? <span className="status-badge available">🟢 Available</span>
-                  : <span className="status-badge busy">🔴 Busy</span>
-                }
-                <button className="book-btn" disabled={!doc.available} onClick={() => openBooking(doc)}>Book Now</button>
-              </div>
+        </div>
+        <div className="dd-graphic">
+          <div className="dd-graphic-card">
+            <div className="dd-stat">
+              <span>Available Today</span>
+              <strong>{filteredDoctors.filter(d => d.available).length}</strong>
+              <small>Doctors</small>
             </div>
-          ))
-        )}
+            <div className="dd-circle">33%</div>
+          </div>
+        </div>
+      </div>
+
+      <div className="doctors-list-vertical">
+        {filteredDoctors.map(doc => (
+          <div key={doc.id} className="premium-doctor-card">
+            <div className="pd-avatar" style={{ backgroundColor: doc.available ? '#8b5cf6' : '#94a3b8' }}>
+              {doc.name.split(' ').map(n => n[0]).join('').replace('D', '').substring(0, 2)}
+              {doc.available && <span className="pd-online-dot"></span>}
+            </div>
+            
+            <div className="pd-info">
+              <h4>{doc.name} {doc.available ? <span className="verified-badge">✓</span> : <span className="unverified-badge">✕</span>}</h4>
+              <p>🩺 {doc.specialty}</p>
+              <p>🏥 {selectedHospital.name}</p>
+            </div>
+            
+            <div className="pd-schedule">
+              <p>⏰ {doc.time}</p>
+              <p>📍 {selectedHospital.distance} away</p>
+              <p>📅 Mon - Sat</p>
+            </div>
+            
+            <div className="pd-action">
+              {doc.available 
+                ? <span className="pd-status status-green">● Available</span>
+                : <span className="pd-status status-red">● Away</span>
+              }
+              <button 
+                className="pd-book-btn" 
+                disabled={!doc.available} 
+                onClick={() => openBooking(doc)}
+              >
+                Book Slot 〉
+              </button>
+            </div>
+            <button className="pd-menu">⋮</button>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -347,10 +455,10 @@ export default function HospitalsPage() {
     );
   };
 
-  // --- Main Render ---
   return (
     <div className="hospitals-page">
       {renderBookingModal()}
+      
       {/* Header */}
       <header className="page-header">
         <button className="back-button" onClick={goBack}>

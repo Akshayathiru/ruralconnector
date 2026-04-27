@@ -18,6 +18,7 @@ import './App.css'
 // As we build each page, we add it here
 import HomePage   from './pages/HomePage'
 import DoctorPage from './pages/DoctorPage'
+import HospitalsPage from './pages/HospitalsPage'
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
         <Routes>
           <Route path="/"       element={<HomePage />}   />
           <Route path="/doctor" element={<DoctorPage />} />
+          <Route path="/hospitals" element={<HospitalsPage />} />
         </Routes>
       </div>
     </BrowserRouter>

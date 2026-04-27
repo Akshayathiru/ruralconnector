@@ -26,9 +26,9 @@ function HomePage() {
             <span className="nav-icon">🏠</span>
             Home
           </a>
-          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/doctor'); }}>
-            <span className="nav-icon">📅</span>
-            Doctor Availability
+          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/hospitals'); }}>
+            <span className="nav-icon">🏥</span>
+            Nearby Hospitals
           </a>
           <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); alert('Coming soon!'); }}>
             <span className="nav-icon">💊</span>
@@ -101,8 +101,8 @@ function HomePage() {
                 Access healthcare services, check availability, and get connected with trusted medical support in your area.
               </p>
               <div className="hero-buttons">
-                <button className="btn-primary" onClick={() => navigate('/doctor')}>
-                  📅 Check Doctor Availability
+                <button className="btn-primary" onClick={() => navigate('/hospitals')}>
+                  🏥 Find Nearby Hospitals
                 </button>
                 <button className="btn-secondary" onClick={() => alert('Coming soon!')}>
                   💊 Check Medicine Availability
@@ -126,11 +126,11 @@ function HomePage() {
           {/* HELP SECTION */}
           <h2 className="section-title">How can we help you today?</h2>
           <div className="services-grid">
-            <div className="service-card" onClick={() => navigate('/doctor')}>
-              <div className="service-icon icon-purple">📅</div>
+            <div className="service-card" onClick={() => navigate('/hospitals')}>
+              <div className="service-icon icon-purple">🏥</div>
               <div className="service-info">
-                <h3>Doctor Availability</h3>
-                <p>Find and connect with available doctors</p>
+                <h3>Nearby Hospitals</h3>
+                <p>Find hospitals by location, symptoms, or age</p>
               </div>
               <div className="service-arrow">→</div>
             </div>

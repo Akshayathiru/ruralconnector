@@ -1,114 +1,219 @@
-// ─────────────────────────────────────────────────────────────────────────────
-// HomePage.jsx  —  Updated with navigation
-//
-// 📚 NEW: useNavigate
-//    Now each button navigates to its own page instead of showing an alert.
-//    useNavigate() gives us a navigate() function.
-//    Calling navigate('/doctor') takes the user to the /doctor URL.
-// ─────────────────────────────────────────────────────────────────────────────
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import './HomePage.css'
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import './HomePage.css';
 
-// Button data — 'path' tells React Router which page to go to
-// If path is null, the page isn't built yet (shows "coming soon")
-const BUTTONS = [
-  { emoji: '🟢', label: 'Check Doctor Availability',   id: 'btn-doctor',   color: 'btn-green',  path: '/doctor'   },
-  { emoji: '💊', label: 'Check Medicine Availability', id: 'btn-medicine', color: 'btn-blue',   path: null        },
-  { emoji: '🩺', label: 'Symptom Checker',             id: 'btn-symptom',  color: 'btn-orange', path: null        },
-  { emoji: '🎤', label: 'Speak Your Problem (Voice)',  id: 'btn-voice',    color: 'btn-purple', path: null        },
-  { emoji: '👩‍⚕️', label: 'ASHA Login',               id: 'btn-asha',     color: 'btn-teal',   path: null        },
-  { emoji: '🏥', label: 'Hospital Login',              id: 'btn-hospital', color: 'btn-red',    path: null        },
-]
-
-// ── ActionButton component ──
-// navigate is passed down from the parent as a prop
-function ActionButton({ emoji, label, id, color, path, navigate }) {
-  const handleClick = () => {
-    if (path) {
-      navigate(path)               // go to the page
-    } else {
-      alert(`"${label}" — Coming soon! 🚧`)
-    }
-  }
-
-  return (
-    <button className={`action-btn ${color}`} id={id} onClick={handleClick}>
-      <span className="btn-emoji">{emoji}</span>
-      <span className="btn-label">{label}</span>
-    </button>
-  )
-}
-
-// ── Main HomePage component ──
 function HomePage() {
-  // 📚 useNavigate must be called inside the component function (React rule for hooks)
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
-    <div className="home-page">
-      {/* ── AMBIENT BACKGROUND BLOBS ── */}
-      <div className="ambient-blob blob-1" />
-      <div className="ambient-blob blob-2" />
-      <div className="ambient-blob blob-3" />
-
-      {/* ── TOP NAV BAR ── */}
-      <nav className="home-nav">
-        <div className="nav-brand">
-          <div className="nav-dot" />
-          RHC
+    <div className="dashboard-container">
+      {/* ── SIDEBAR ── */}
+      <aside className="sidebar">
+        <div className="sidebar-brand">
+          <div className="brand-logo">
+            <div className="brand-icon">
+              <span>+</span>
+            </div>
+            <div>
+              <h2 className="brand-title">Rural Healthcare</h2>
+              <span className="brand-subtitle">Connect</span>
+            </div>
+          </div>
         </div>
-        <span className="nav-badge">🇮🇳 Rural India</span>
-      </nav>
 
-      {/* ── HEADER ── */}
-      <header className="home-header">
-        <div className="logo-wrap">
-          <span className="logo-icon">🏥</span>
+        <nav className="sidebar-nav">
+          <a href="#" className="nav-item active">
+            <span className="nav-icon">🏠</span>
+            Home
+          </a>
+          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/doctor'); }}>
+            <span className="nav-icon">📅</span>
+            Doctor Availability
+          </a>
+          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); alert('Coming soon!'); }}>
+            <span className="nav-icon">💊</span>
+            Medicine Availability
+          </a>
+          <a href="#" className="nav-item">
+            <span className="nav-icon">🩺</span>
+            Health Services
+          </a>
+          <a href="#" className="nav-item">
+            <span className="nav-icon">📖</span>
+            Health Tips
+          </a>
+          <a href="#" className="nav-item">
+            <span className="nav-icon">📞</span>
+            Emergency
+          </a>
+          <a href="#" className="nav-item">
+            <span className="nav-icon">ℹ️</span>
+            About Us
+          </a>
+        </nav>
+
+        <div className="sidebar-help">
+          <h3>Need Help?</h3>
+          <p>Our support team is available to assist you.</p>
+          <button className="contact-btn">
+            🎧 Contact Support
+          </button>
         </div>
-        <h1 className="home-title">
-          Rural Healthcare<br />
-          <span>Connect</span>
-        </h1>
-        <p className="home-subtitle">
-          Check doctor availability before travelling
-        </p>
-        <div className="subtitle-chip">
-          <span>●</span> System Online — Updated Today
-        </div>
-      </header>
+      </aside>
 
-      {/* ── DIVIDER ── */}
-      <div className="section-divider" />
+      {/* ── MAIN CONTENT ── */}
+      <main className="main-content">
+        {/* TOP BAR */}
+        <header className="topbar">
+          <div className="topbar-left">
+            <div className="location-selector">
+              <span>📍</span> Rural India <span>v</span>
+            </div>
+          </div>
+          <div className="topbar-right">
+            <button className="notification-btn">
+              🔔
+              <span className="notification-dot"></span>
+            </button>
+            <div className="user-profile">
+              <div className="avatar">A</div>
+              <div className="user-info">
+                <span className="user-name">Assistant</span>
+                <span className="user-status">Online</span>
+              </div>
+              <span className="dropdown-icon">v</span>
+            </div>
+          </div>
+        </header>
 
-      {/* ── BUTTONS ── */}
-      <main className="home-main">
-        <p className="choose-text">What do you need help with?</p>
-        <div className="btn-grid">
-          {BUTTONS.map(btn => (
-            <ActionButton
-              key={btn.id}
-              emoji={btn.emoji}
-              label={btn.label}
-              id={btn.id}
-              color={btn.color}
-              path={btn.path}
-              navigate={navigate}   // pass navigate into each button
-            />
-          ))}
+        <div className="dashboard-content">
+          {/* HERO SECTION */}
+          <div className="hero-section">
+            <div className="hero-left">
+              <div className="hero-badge">
+                <span className="badge-icon">✓</span> Your Health, Our Priority
+              </div>
+              <h1 className="hero-title">
+                Rural Healthcare<br />
+                <span className="highlight">Connect</span>
+              </h1>
+              <p className="hero-desc">
+                Access healthcare services, check availability, and get connected with trusted medical support in your area.
+              </p>
+              <div className="hero-buttons">
+                <button className="btn-primary" onClick={() => navigate('/doctor')}>
+                  📅 Check Doctor Availability
+                </button>
+                <button className="btn-secondary" onClick={() => alert('Coming soon!')}>
+                  💊 Check Medicine Availability
+                </button>
+              </div>
+            </div>
+            <div className="hero-right">
+              <div className="clinic-card">
+                <img src="/clinic.png" alt="Clinic 3D Illustration" className="clinic-image" />
+                <div className="clinic-status">
+                  <div className="status-header">
+                    <span className="status-dot"></span> System Online
+                    <span className="status-check">✓</span>
+                  </div>
+                  <p>All services are active and available</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* HELP SECTION */}
+          <h2 className="section-title">How can we help you today?</h2>
+          <div className="services-grid">
+            <div className="service-card" onClick={() => navigate('/doctor')}>
+              <div className="service-icon icon-purple">📅</div>
+              <div className="service-info">
+                <h3>Doctor Availability</h3>
+                <p>Find and connect with available doctors</p>
+              </div>
+              <div className="service-arrow">→</div>
+            </div>
+            
+            <div className="service-card" onClick={() => alert('Coming soon!')}>
+              <div className="service-icon icon-green">💊</div>
+              <div className="service-info">
+                <h3>Medicine Availability</h3>
+                <p>Check medicine availability at nearby pharmacies</p>
+              </div>
+              <div className="service-arrow">→</div>
+            </div>
+            
+            <div className="service-card">
+              <div className="service-icon icon-pink">❤️</div>
+              <div className="service-info">
+                <h3>Health Services</h3>
+                <p>Explore various healthcare services</p>
+              </div>
+              <div className="service-arrow">→</div>
+            </div>
+            
+            <div className="service-card">
+              <div className="service-icon icon-orange">📞</div>
+              <div className="service-info">
+                <h3>Emergency Support</h3>
+                <p>Get immediate help in emergency situations</p>
+              </div>
+              <div className="service-arrow">→</div>
+            </div>
+          </div>
+
+          {/* BOTTOM WIDGETS */}
+          <div className="widgets-grid">
+            <div className="tips-widget">
+              <div className="tips-content">
+                <div className="tips-header">
+                  <span className="tips-icon">📖</span>
+                  <h3>Health Tips</h3>
+                </div>
+                <p>Stay informed with our latest health tips and wellness advice</p>
+                <a href="#" className="view-all">View All Tips →</a>
+              </div>
+              <div className="tips-image-wrapper">
+                <img src="/stethoscope.png" alt="Health Tips" className="tips-image" />
+              </div>
+            </div>
+            
+            <div className="stats-widget">
+              <div className="stats-header">
+                <span className="stats-icon">📊</span>
+                <h3>Quick Stats</h3>
+              </div>
+              <div className="stats-container">
+                <div className="stat-item">
+                  <h4>500+</h4>
+                  <p>Doctors Connected</p>
+                </div>
+                <div className="stat-item">
+                  <h4 className="text-green">1000+</h4>
+                  <p>Medicines Available</p>
+                </div>
+                <div className="stat-item">
+                  <h4 className="text-red">24/7</h4>
+                  <p>Emergency Support</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* BOTTOM BANNER */}
+          <div className="bottom-banner">
+            <div className="banner-icon">🛡️</div>
+            <div className="banner-text">
+              <h3>Your health is our mission</h3>
+              <p>We are committed to providing accessible and quality healthcare for every individual in rural India.</p>
+            </div>
+            <button className="banner-btn">Learn More About Us</button>
+          </div>
         </div>
       </main>
-
-      {/* ── FOOTER ── */}
-      <footer className="home-footer">
-        <div className="footer-inner">
-          <div className="footer-dot" />
-          <p>Serving rural communities across India — Free &amp; Always Available</p>
-        </div>
-      </footer>
-
     </div>
-  )
+  );
 }
 
-export default HomePage
+export default HomePage;

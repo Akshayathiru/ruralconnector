@@ -1,102 +1,138 @@
-// ─────────────────────────────────────────────────────────────────────────────
-// MedicinePage.jsx  —  CHECK MEDICINE AVAILABILITY
-//
-// 📚 CONCEPTS USED HERE:
-//
-//   1. onChange Event: Captures what the user types into the search box.
-//   2. Filtering Lists: We use .filter() to search through medicine names
-//      based on the typed input, ignoring uppercase/lowercase differences.
-//
-// ─────────────────────────────────────────────────────────────────────────────
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import './PageStyles.css'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './MedicinePage.css';
 
-// ── MOCK DATA ──────────────────────────────────────────────────────────────
-// Fake data representing a pharmacy's current inventory.
-// ──────────────────────────────────────────────────────────────────────────
-const MEDICINES = [
-  { id: 1, name: 'Paracetamol 500mg',    category: 'Painkiller',   inStock: true,  qty: 240, pharmacy: 'PHC Ramnagar' },
-  { id: 2, name: 'Amoxicillin 250mg',    category: 'Antibiotic',   inStock: true,  qty: 80,  pharmacy: 'CHC Bilaspur' },
-  { id: 3, name: 'ORS Sachets',          category: 'Rehydration',  inStock: false, qty: 0,   pharmacy: 'PHC Sehore'   },
-  { id: 4, name: 'Iron + Folic Acid',    category: 'Supplement',   inStock: true,  qty: 500, pharmacy: 'PHC Ramnagar' },
-  { id: 5, name: 'Metformin 500mg',      category: 'Diabetes',     inStock: false, qty: 0,   pharmacy: 'CHC Bilaspur' },
-  { id: 6, name: 'Amlodipine 5mg',       category: 'BP Medicine',  inStock: true,  qty: 120, pharmacy: 'District Hosp.' },
-]
+// --- MOCK DATA ---
+const MOCK_PHARMACIES = [
+  { id: 1, name: "City Pharma", distance: "2km", distanceValue: 2, location: "Main Street", rating: 4.8 },
+  { id: 2, name: "Rural Health Pharmacy", distance: "5km", distanceValue: 5, location: "Village Center", rating: 4.5 },
+  { id: 3, name: "Apollo Pharmacy", distance: "8km", distanceValue: 8, location: "South Chennai", rating: 4.9 },
+  { id: 4, name: "MedPlus", distance: "12km", distanceValue: 12, location: "North Chennai", rating: 4.6 },
+  { id: 5, name: "Green Cross Pharmacy", distance: "18km", distanceValue: 18, location: "West Chennai", rating: 4.7 },
+];
 
-function MedicinePage() {
-  const navigate = useNavigate()
+const MOCK_MEDICINES = [
+  { id: 101, pharmacyId: 1, name: "Paracetamol 500mg", type: "Tablet", qty: "500+", inStock: true, price: "₹20/strip" },
+  { id: 102, pharmacyId: 1, name: "Amoxicillin 250mg", type: "Capsule", qty: "200", inStock: true, price: "₹45/strip" },
+  { id: 103, pharmacyId: 2, name: "Paracetamol 500mg", type: "Tablet", qty: "100", inStock: true, price: "₹18/strip" },
+  { id: 104, pharmacyId: 2, name: "ORS Sachets", type: "Powder", qty: "0", inStock: false, price: "₹5/pack" },
+  { id: 105, pharmacyId: 3, name: "Insulin Pen", type: "Injection", qty: "50", inStock: true, price: "₹450/pen" },
+  { id: 106, pharmacyId: 3, name: "Metformin 500mg", type: "Tablet", qty: "300", inStock: true, price: "₹35/strip" },
+  { id: 107, pharmacyId: 4, name: "Cough Syrup", type: "Syrup", qty: "80", inStock: true, price: "₹65/bottle" },
+  { id: 108, pharmacyId: 5, name: "Vitamin C", type: "Tablet", qty: "0", inStock: false, price: "₹30/strip" },
+];
+
+export default function MedicinePage() {
+  const navigate = useNavigate();
   
-  // State to hold the current search text
-  const [search, setSearch] = useState('')
+  const [searchQuery, setSearchQuery] = useState('');
+  const [distanceFilter, setDistanceFilter] = useState('any');
 
-  // Filter medicines based on the search text.
-  // We convert both to lowercase to make the search case-insensitive.
-  const filtered = MEDICINES.filter(m =>
-    m.name.toLowerCase().includes(search.toLowerCase())
-  )
+  const filteredData = MOCK_MEDICINES.filter(med => {
+    const pharmacy = MOCK_PHARMACIES.find(p => p.id === med.pharmacyId);
+    const matchesSearch = med.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesDistance = distanceFilter === 'any' || pharmacy.distanceValue <= parseInt(distanceFilter);
+    return matchesSearch && matchesDistance;
+  }).map(med => ({
+    ...med,
+    pharmacy: MOCK_PHARMACIES.find(p => p.id === med.pharmacyId)
+  }));
 
   return (
-    <div className="page-wrapper">
-      
-      {/* ── BACK BUTTON ── */}
-      <button className="back-btn" onClick={() => navigate('/')}>
-        ← Back to Home
-      </button>
+    <div className="medicine-page">
+      {/* Header */}
+      <header className="page-header">
+        <button className="back-button" onClick={() => navigate('/')}>← Back</button>
+        <div className="header-titles">
+          <h1>Medicine Availability</h1>
+          <p>Find tablets and medicines at nearby pharmacies</p>
+        </div>
+      </header>
 
-      {/* ── HEADER ── */}
-      <div className="page-header">
-        <span className="page-icon">💊</span>
-        <h1 className="page-title">Medicine Availability</h1>
-        <p className="page-sub">
-          Check real-time stock levels at nearby facilities
-        </p>
-      </div>
-
-      {/* ── SEARCH BOX ── */}
-      <div className="search-wrap">
-        <input
-          className="search-input"
-          type="text"
-          placeholder="🔍 Search for a medicine..."
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-        />
-      </div>
-
-      {/* ── MEDICINE CARDS ── */}
-      <div className="card-list">
-        {/* If no medicines match the search, show a friendly message */}
-        {filtered.length === 0 && (
-          <p className="no-results">No medicines found matching "{search}"</p>
-        )}
-
-        {/* Loop through the filtered medicines and render a card for each */}
-        {filtered.map(med => (
-          <div key={med.id} className={`medicine-card ${med.inStock ? 'card-available' : 'card-unavailable'}`}>
-            
-            <div className="card-icon-big">💊</div>
-            
-            <div className="card-info">
-              <h2 className="card-name">{med.name}</h2>
-              <p className="card-specialty">🏷 {med.category}</p>
-              <p className="card-hospital">🏥 {med.pharmacy}</p>
-              {med.inStock && <p className="card-time">📦 {med.qty} units available</p>}
-            </div>
-            
-            <div className="card-status">
-              {med.inStock
-                ? <span className="badge badge-green">In Stock</span>
-                : <span className="badge badge-red">Out of Stock</span>
-              }
-            </div>
-            
+      <main className="page-content">
+        {/* Filter Bar */}
+        <div className="filter-bar">
+          <div className="search-input-wrapper">
+            <span className="search-icon">🔍</span>
+            <input 
+              type="text" 
+              placeholder="Search for tablets (e.g., Paracetamol)..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </div>
-        ))}
-      </div>
+          <select 
+            className="filter-select"
+            value={distanceFilter}
+            onChange={(e) => setDistanceFilter(e.target.value)}
+          >
+            <option value="any">Any Distance</option>
+            <option value="5">Within 5km</option>
+            <option value="15">Within 15km</option>
+            <option value="50">Within 50km</option>
+          </select>
+          <button className="apply-filters-btn">⚡ Apply Filters</button>
+        </div>
 
+        <div className="results-header">
+          <h2>Results for: <span className="highlight-tag">{searchQuery || 'All Medicines'}</span></h2>
+          <span className="results-count">💊 {filteredData.length} Medicines found</span>
+        </div>
+
+        {/* Medicine List */}
+        <div className="medicine-grid">
+          {filteredData.length === 0 ? (
+            <div className="empty-state">
+              <p>No medicines found matching your search.</p>
+            </div>
+          ) : (
+            filteredData.map(med => (
+              <div key={med.id} className="premium-medicine-card">
+                <div className="pm-top">
+                  <div className="pm-icon-area">
+                    <div className="pm-icon-box">💊</div>
+                  </div>
+                  <div className="pm-info">
+                    <h3>{med.name}</h3>
+                    <p className="pm-pharmacy">🏥 {med.pharmacy.name} • 📍 {med.pharmacy.location}</p>
+                    <div className="pm-tags">
+                      <span className="tag tag-soft-purple">{med.type}</span>
+                      <span className={`tag ${med.inStock ? 'tag-soft-green' : 'tag-soft-red'}`}>
+                        {med.inStock ? 'In Stock' : 'Out of Stock'}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="pm-distance-badge">
+                    {med.pharmacy.distance} away
+                  </div>
+                </div>
+                
+                <div className="pm-divider"></div>
+                
+                <div className="pm-bottom">
+                  <div className="pm-stats">
+                    <div className="stat">
+                      <span className="stat-icon">📦</span>
+                      <div><strong>{med.qty}</strong><span>Units</span></div>
+                    </div>
+                    <div className="stat">
+                      <span className="stat-icon">💰</span>
+                      <div><strong>{med.price}</strong><span>Price</span></div>
+                    </div>
+                    <div className="stat">
+                      <span className="stat-icon">⭐</span>
+                      <div><strong>{med.pharmacy.rating}</strong><span>Pharmacy Rating</span></div>
+                    </div>
+                  </div>
+                  <button className="pm-view-btn" disabled={!med.inStock}>
+                    {med.inStock ? 'Order Now →' : 'Out of Stock'}
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </main>
     </div>
-  )
+  );
 }
-
-export default MedicinePage

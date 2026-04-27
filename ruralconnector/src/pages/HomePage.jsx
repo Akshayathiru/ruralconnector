@@ -135,7 +135,7 @@ function HomePage() {
               <div className="service-arrow">→</div>
             </div>
             
-            <div className="service-card" onClick={() => alert('Coming soon!')}>
+            <div className="service-card" onClick={() => navigate('/medicine')}>
               <div className="service-icon icon-green">💊</div>
               <div className="service-info">
                 <h3>Medicine Availability</h3>

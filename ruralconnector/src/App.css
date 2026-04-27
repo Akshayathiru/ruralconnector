@@ -1,0 +1,14 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   App.css  —  Styles for the App wrapper div
+   
+   📚 WHY IS THIS SEPARATE FROM index.css?
+      index.css   → global styles (affects the whole page)
+      App.css     → styles only for the App component's wrapper div
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* The .app-wrapper div in App.jsx:
+   We just make it fill the full height of the screen */
+.app-wrapper {
+  min-height: 100vh;
+  width: 100%;
+}

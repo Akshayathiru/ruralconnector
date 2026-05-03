@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { MOCK_DOCTORS } from './HospitalsPage';
+import { translations } from '../translations';
 import './PageStyles.css';
 
 function AdminDashboardPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const hospital = location.state?.hospital;
+
+  const [lang] = useState(localStorage.getItem('userLanguage') || 'en');
+  const t = translations[lang] || translations.en;
 
   // If no hospital passed (e.g. direct URL access), redirect
   useEffect(() => {
@@ -51,34 +55,34 @@ function AdminDashboardPage() {
 
   const handleSave = () => {
     localStorage.setItem(storageKey, JSON.stringify(data));
-    alert('Hospital details updated successfully! These changes are now live.');
+    alert(t.success_update);
   };
 
   return (
     <div className="page-wrapper">
-      <button className="back-btn" onClick={() => navigate('/asha')}>← Logout</button>
+      <button className="back-btn" onClick={() => navigate('/asha')}>← {t.logout}</button>
       
       <div className="page-header" style={{ textAlign: 'left', width: '100%', maxWidth: '560px' }}>
-        <h1 className="page-title">{hospital.name}</h1>
-        <p className="page-sub">Admin Dashboard • {hospital.location}</p>
+        <h1 className="page-title">{t[hospital.name] || hospital.name}</h1>
+        <p className="page-sub">Admin Dashboard • {t[hospital.location] || hospital.location}</p>
       </div>
 
       <div style={{ width: '100%', maxWidth: '560px', background: '#fff', padding: '20px', borderRadius: '14px', border: '1px solid #e5e7eb', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
         
         <div style={{ marginBottom: '20px' }}>
-          <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '8px', color: '#374151' }}>Hospital Status</label>
+          <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '8px', color: '#374151' }}>{t.hospital_status}</label>
           <select 
             className="search-input" 
             value={data.isOpen ? 'open' : 'closed'}
             onChange={(e) => setData({ ...data, isOpen: e.target.value === 'open' })}
           >
-            <option value="open">🟢 Open / Receiving Patients</option>
-            <option value="closed">🔴 Closed / Capacity Full</option>
+            <option value="open">🟢 {t.open_receiving}</option>
+            <option value="closed">🔴 {t.closed_capacity}</option>
           </select>
         </div>
 
         <div style={{ marginBottom: '20px' }}>
-          <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '8px', color: '#374151' }}>Doctors Available Now</label>
+          <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '8px', color: '#374151' }}>{t.doctors_available_now}</label>
           <input 
             type="text" 
             className="search-input" 
@@ -96,29 +100,29 @@ function AdminDashboardPage() {
               onChange={(e) => setData({ ...data, emergencyAvailable: e.target.checked })}
               style={{ width: '18px', height: '18px' }}
             />
-            Emergency Ward Active
+            {t.emergency_ward_active}
           </label>
         </div>
 
         <div style={{ marginBottom: '30px' }}>
-          <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '8px', color: '#374151' }}>Public Announcement</label>
+          <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '8px', color: '#374151' }}>{t.public_announcement}</label>
           <textarea 
             className="search-input" 
             value={data.announcement}
             onChange={(e) => setData({ ...data, announcement: e.target.value })}
-            placeholder="e.g. Vaccine drive tomorrow..."
+            placeholder="..."
             style={{ minHeight: '80px', resize: 'vertical' }}
           />
         </div>
 
         <div style={{ marginBottom: '30px' }}>
-          <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '15px', color: '#374151', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>Manage Doctor Availability</label>
+          <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '15px', color: '#374151', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>{t.manage_doctor_avail}</label>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {myDoctors.map(doc => (
               <div key={doc.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px', background: '#f9fafb', borderRadius: '10px' }}>
                 <div>
-                  <p style={{ margin: 0, fontWeight: 'bold', fontSize: '0.9rem' }}>{doc.name}</p>
-                  <p style={{ margin: 0, fontSize: '0.75rem', color: '#666' }}>{doc.specialty}</p>
+                  <p style={{ margin: 0, fontWeight: 'bold', fontSize: '0.9rem' }}>{t[doc.name] || doc.name}</p>
+                  <p style={{ margin: 0, fontSize: '0.75rem', color: '#666' }}>{t[doc.specialty] || doc.specialty}</p>
                 </div>
                 <button 
                   onClick={() => toggleDoctor(doc.id)}
@@ -133,7 +137,7 @@ function AdminDashboardPage() {
                     cursor: 'pointer'
                   }}
                 >
-                  {data.doctorOverrides[doc.id] ? 'Available' : 'Away'}
+                  {data.doctorOverrides[doc.id] ? t.available_btn : t.away_btn}
                 </button>
               </div>
             ))}
@@ -141,7 +145,7 @@ function AdminDashboardPage() {
         </div>
 
         <button className="primary-action-btn" onClick={handleSave} style={{ margin: 0 }}>
-          💾 Save Changes
+          💾 {t.save_changes}
         </button>
       </div>
     </div>

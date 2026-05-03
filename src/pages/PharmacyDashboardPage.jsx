@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { MOCK_MEDICINES } from './MedicinePage';
+import { translations } from '../translations';
 import './PageStyles.css';
 
 function PharmacyDashboardPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const pharmacy = location.state?.pharmacy;
+
+  const [lang] = useState(localStorage.getItem('userLanguage') || 'en');
+  const t = translations[lang] || translations.en;
 
   useEffect(() => {
     if (!pharmacy) {
@@ -59,41 +63,41 @@ function PharmacyDashboardPage() {
 
   const handleSave = () => {
     localStorage.setItem(storageKey, JSON.stringify(data));
-    alert('Pharmacy stock updated successfully!');
+    alert(t.success_update);
   };
 
   return (
     <div className="page-wrapper">
-      <button className="back-btn" onClick={() => navigate('/pharmacy-login')}>← Logout</button>
+      <button className="back-btn" onClick={() => navigate('/pharmacy-login')}>← {t.logout}</button>
       
       <div className="page-header" style={{ textAlign: 'left', width: '100%', maxWidth: '560px' }}>
-        <h1 className="page-title">{pharmacy.name}</h1>
-        <p className="page-sub">Pharmacy Dashboard • {pharmacy.location}</p>
+        <h1 className="page-title">{t[pharmacy.name] || pharmacy.name}</h1>
+        <p className="page-sub">Pharmacy Dashboard • {t[pharmacy.location] || pharmacy.location}</p>
       </div>
 
       <div style={{ width: '100%', maxWidth: '560px', background: '#fff', padding: '20px', borderRadius: '14px', border: '1px solid #e5e7eb', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
         
         <div style={{ marginBottom: '20px' }}>
-          <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '8px', color: '#374151' }}>Pharmacy Status</label>
+          <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '8px', color: '#374151' }}>{t.pharmacy_status}</label>
           <select 
             className="search-input" 
             value={data.isOpen ? 'open' : 'closed'}
             onChange={(e) => setData({ ...data, isOpen: e.target.value === 'open' })}
           >
-            <option value="open">🟢 Open</option>
-            <option value="closed">🔴 Closed</option>
+            <option value="open">🟢 {t.open}</option>
+            <option value="closed">🔴 {t.closed}</option>
           </select>
         </div>
 
         <div style={{ marginBottom: '30px' }}>
-          <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '15px', color: '#374151', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>Manage Medicine Stock</label>
+          <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '15px', color: '#374151', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>{t.manage_medicine_stock}</label>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {myMedicines.map(med => (
               <div key={med.id} style={{ padding: '12px', background: '#f9fafb', borderRadius: '10px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
                   <div>
-                    <p style={{ margin: 0, fontWeight: 'bold', fontSize: '0.9rem' }}>{med.name}</p>
-                    <p style={{ margin: 0, fontSize: '0.75rem', color: '#666' }}>{med.type}</p>
+                    <p style={{ margin: 0, fontWeight: 'bold', fontSize: '0.9rem' }}>{t[med.name] || med.name}</p>
+                    <p style={{ margin: 0, fontSize: '0.75rem', color: '#666' }}>{t[med.type] || med.type}</p>
                   </div>
                   <button 
                     onClick={() => toggleStock(med.id)}
@@ -108,11 +112,11 @@ function PharmacyDashboardPage() {
                       cursor: 'pointer'
                     }}
                   >
-                    {data.medicineStock[med.id].inStock ? 'In Stock' : 'Out of Stock'}
+                    {data.medicineStock[med.id].inStock ? t.in_stock : t.out_of_stock}
                   </button>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <label style={{ fontSize: '0.75rem', color: '#666' }}>Quantity:</label>
+                  <label style={{ fontSize: '0.75rem', color: '#666' }}>{t.quantity}:</label>
                   <input 
                     type="text" 
                     value={data.medicineStock[med.id].qty} 
@@ -126,7 +130,7 @@ function PharmacyDashboardPage() {
         </div>
 
         <button className="primary-action-btn" onClick={handleSave} style={{ margin: 0 }}>
-          💾 Save Changes
+          💾 {t.save_changes}
         </button>
       </div>
     </div>

@@ -4,7 +4,7 @@ import './MedicinePage.css';
 import { translations } from '../translations';
 
 // --- MOCK DATA ---
-const MOCK_PHARMACIES = [
+export const MOCK_PHARMACIES = [
   { id: 1, name: "City Pharma", distance: "2km", distanceValue: 2, location: "Main Street", rating: 4.8 },
   { id: 2, name: "Rural Health Pharmacy", distance: "5km", distanceValue: 5, location: "Village Center", rating: 4.5 },
   { id: 3, name: "Apollo Pharmacy", distance: "8km", distanceValue: 8, location: "South Chennai", rating: 4.9 },
@@ -12,7 +12,7 @@ const MOCK_PHARMACIES = [
   { id: 5, name: "Green Cross Pharmacy", distance: "18km", distanceValue: 18, location: "West Chennai", rating: 4.7 },
 ];
 
-const MOCK_MEDICINES = [
+export const MOCK_MEDICINES = [
   { id: 101, pharmacyId: 1, name: "Paracetamol 500mg", type: "Tablet", qty: "500+", inStock: true, price: "₹20/strip" },
   { id: 102, pharmacyId: 1, name: "Amoxicillin 250mg", type: "Capsule", qty: "200", inStock: true, price: "₹45/strip" },
   { id: 103, pharmacyId: 2, name: "Paracetamol 500mg", type: "Tablet", qty: "100", inStock: true, price: "₹18/strip" },
@@ -32,7 +32,17 @@ export default function MedicinePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [distanceFilter, setDistanceFilter] = useState('any');
 
-  const filteredData = MOCK_MEDICINES.filter(med => {
+  const filteredData = MOCK_MEDICINES.map(med => {
+    const saved = localStorage.getItem(`pharmacy_admin_${med.pharmacyId}`);
+    if (saved) {
+      const adminData = JSON.parse(saved);
+      const stockInfo = adminData.medicineStock[med.id];
+      if (stockInfo) {
+        return { ...med, inStock: stockInfo.inStock, qty: stockInfo.qty };
+      }
+    }
+    return med;
+  }).filter(med => {
     const pharmacy = MOCK_PHARMACIES.find(p => p.id === med.pharmacyId);
     const translatedName = t[med.name] || med.name;
     const matchesSearch = translatedName.toLowerCase().includes(searchQuery.toLowerCase());

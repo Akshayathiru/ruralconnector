@@ -25,6 +25,8 @@ import LanguageSelectionPage from './pages/LanguageSelectionPage'
 import VoicePage from './pages/VoicePage'
 import AshaPortalPage from './pages/AshaPortalPage'
 import AdminDashboardPage from './pages/AdminDashboardPage'
+import PharmacyPortalPage from './pages/PharmacyPortalPage'
+import PharmacyDashboardPage from './pages/PharmacyDashboardPage'
 
 function App() {
   return (
@@ -46,6 +48,8 @@ function App() {
           <Route path="/voice" element={<VoicePage />} />
           <Route path="/asha" element={<AshaPortalPage />} />
           <Route path="/admin-dashboard" element={<AdminDashboardPage />} />
+          <Route path="/pharmacy-login" element={<PharmacyPortalPage />} />
+          <Route path="/pharmacy-dashboard" element={<PharmacyDashboardPage />} />
         </Routes>
       </div>
     </BrowserRouter>

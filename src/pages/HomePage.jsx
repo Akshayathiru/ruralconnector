@@ -43,9 +43,9 @@ function HomePage() {
             <span className="nav-icon">🩺</span>
             {t.asha}
           </a>
-          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); alert('Coming soon!'); }}>
-            <span className="nav-icon">📖</span>
-            {t.symptoms}
+          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/pharmacy-login'); }}>
+            <span className="nav-icon">🏪</span>
+            Pharmacy Login
           </a>
           <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/voice'); }}>
             <span className="nav-icon">📞</span>

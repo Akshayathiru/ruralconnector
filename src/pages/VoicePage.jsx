@@ -31,6 +31,7 @@ function VoicePage() {
   const [transcript, setTranscript]   = useState('')       // recognized text
   const [supported, setSupported]     = useState(true)     // browser support?
   const [language, setLanguage]       = useState('hi-IN')  // selected language
+  const [chatInput, setChatInput]     = useState('')       // manual text input
 
   // 📚 useRef stores a value that does NOT cause a re-render when changed.
   //    We use it to hold the SpeechRecognition object between renders.
@@ -85,6 +86,23 @@ function VoicePage() {
     setIsListening(false)
   }
 
+  const handleSendChat = () => {
+    if (!chatInput.trim()) return;
+    setTranscript(chatInput);
+    
+    const lowerText = chatInput.toLowerCase();
+    if (lowerText.includes('fever') || lowerText.includes('hospital') || lowerText.includes('జ్వరం') || lowerText.includes('కாய்ச்சல்') || lowerText.includes('പനി') || lowerText.includes('ताप') || lowerText.includes('बुखार')) {
+      setTimeout(() => {
+        navigate('/hospitals', { state: { autoFilter: 'Fever', autoCategory: 'symptoms', autoView: 'hospitals' } })
+      }, 1500)
+    } else if (lowerText.includes('medicine') || lowerText.includes('paracetamol')) {
+      setTimeout(() => {
+        navigate('/medicine')
+      }, 1500)
+    }
+    setChatInput('');
+  }
+
   const LANGUAGES = [
     { code: 'hi-IN', label: 'हिन्दी (Hindi)' },
     { code: 'en-IN', label: 'English (India)' },
@@ -104,13 +122,14 @@ function VoicePage() {
         <p className="page-sub">{t.speak_sub}</p>
       </div>
 
-      {!supported ? (
-        <div className="result-card level-high">
-          <p>⚠️ Your browser does not support voice input. Please use Google Chrome.</p>
+      {!supported && (
+        <div className="result-card level-high" style={{marginBottom: '20px'}}>
+          <p>⚠️ Your browser does not support voice input. Please type your problem below.</p>
         </div>
-      ) : (
-        <>
-          {/* Language Selector */}
+      )}
+
+      <>
+        {/* Language Selector */}
           <div className="lang-wrap">
             <label className="lang-label">{t.choose_lang}</label>
             <select
@@ -146,6 +165,29 @@ function VoicePage() {
             )}
           </div>
 
+          {/* Fallback Text Chat */}
+          <div className="chat-fallback" style={{width: '100%', maxWidth: '560px', marginTop: '10px'}}>
+            <p className="chat-divider" style={{textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '16px'}}>— OR TYPE YOUR PROBLEM —</p>
+            <div className="chat-input-wrapper" style={{display: 'flex', gap: '8px'}}>
+              <input 
+                type="text" 
+                placeholder="E.g. I have a fever..." 
+                className="search-input"
+                style={{flex: 1, margin: 0}}
+                value={chatInput}
+                onChange={e => setChatInput(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleSendChat()}
+              />
+              <button 
+                className="reset-btn" 
+                style={{margin: 0, padding: '0 24px', background: 'var(--green)', color: '#fff'}}
+                onClick={handleSendChat}
+              >
+                Send
+              </button>
+            </div>
+          </div>
+
           {/* Transcript Result */}
           {transcript && (
             <div className="transcript-card">
@@ -165,8 +207,7 @@ function VoicePage() {
               </button>
             </div>
           )}
-        </>
-      )}
+      </>
     </div>
   )
 }

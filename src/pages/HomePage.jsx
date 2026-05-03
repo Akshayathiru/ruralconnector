@@ -47,7 +47,7 @@ function HomePage() {
             <span className="nav-icon">📖</span>
             {t.symptoms}
           </a>
-          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); alert('Coming soon!'); }}>
+          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/voice'); }}>
             <span className="nav-icon">📞</span>
             {t.voice}
           </a>
@@ -157,7 +157,7 @@ function HomePage() {
               <div className="service-arrow">→</div>
             </div>
             
-            <div className="service-card" onClick={() => alert('Coming soon!')}>
+            <div className="service-card" onClick={() => navigate('/voice')}>
               <div className="service-icon icon-orange">📞</div>
               <div className="service-info">
                 <h3>{t.voice}</h3>

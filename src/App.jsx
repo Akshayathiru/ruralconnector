@@ -22,6 +22,7 @@ import HospitalsPage from './pages/HospitalsPage'
 import VideoCallPage from './pages/VideoCallPage'
 import MedicinePage from './pages/MedicinePage'
 import LanguageSelectionPage from './pages/LanguageSelectionPage'
+import VoicePage from './pages/VoicePage'
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
           <Route path="/hospitals" element={<HospitalsPage />} />
           <Route path="/videocall" element={<VideoCallPage />} />
           <Route path="/medicine" element={<MedicinePage />} />
+          <Route path="/voice" element={<VoicePage />} />
         </Routes>
       </div>
     </BrowserRouter>

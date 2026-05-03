@@ -141,7 +141,14 @@ export const translations = {
     "location": "location",
     "age": "age",
     "Available Today": "Available Today",
-    "Mon - Sat": "Mon - Sat"
+    "Mon - Sat": "Mon - Sat",
+    "book_appointment": "Book Appointment",
+    "with_doctor": "with",
+    "confirm_booking": "Confirm Booking",
+    "booking_confirmed": "Booking Confirmed!",
+    "slot_confirmed_for": "Your slot is confirmed for",
+    "today": "today.",
+    "join_video_call": "Join Video Call"
   },
   "te": {
     "welcome": "గ్రామీణ ఆరోగ్య కనెక్ట్",
@@ -285,7 +292,14 @@ export const translations = {
     "location": "స్థానం",
     "age": "వయస్సు",
     "Available Today": "ఈరోజు అందుబాటులో ఉన్నారు",
-    "Mon - Sat": "సోమ - శని"
+    "Mon - Sat": "సోమ - శని",
+    "book_appointment": "అపాయింట్‌మెంట్ బుక్ చేయండి",
+    "with_doctor": "తో",
+    "confirm_booking": "బుకింగ్‌ను నిర్ధారించండి",
+    "booking_confirmed": "బుకింగ్ నిర్ధారించబడింది!",
+    "slot_confirmed_for": "మీ స్లాట్ దీనికి నిర్ధారించబడింది",
+    "today": "ఈరోజు.",
+    "join_video_call": "వీడియో కాల్‌లో చేరండి"
   },
   "ta": {
     "welcome": "கிராமப்புற சுகாதார இணைப்பு",
@@ -429,7 +443,14 @@ export const translations = {
     "location": "இடம்",
     "age": "வயது",
     "Available Today": "இன்று உள்ளது",
-    "Mon - Sat": "திங்கள் - சனி"
+    "Mon - Sat": "திங்கள் - சனி",
+    "book_appointment": "முன்பதிவு செய்ய",
+    "with_doctor": "உடன்",
+    "confirm_booking": "முன்பதிவை உறுதிப்படுத்துக",
+    "booking_confirmed": "முன்பதிவு உறுதிப்படுத்தப்பட்டது!",
+    "slot_confirmed_for": "உங்கள் ஸ்லாட் இதற்காக உறுதிப்படுத்தப்பட்டுள்ளது",
+    "today": "இன்று.",
+    "join_video_call": "வீடியோ அழைப்பில் சேரவும்"
   },
   "ml": {
     "welcome": "ഗ്രാമീണ ആരോഗ്യ കണക്ട്",
@@ -573,7 +594,14 @@ export const translations = {
     "location": "സ്ഥലം",
     "age": "പ്രായം",
     "Available Today": "ഇന്ന് ലഭ്യമാണ്",
-    "Mon - Sat": "തിങ്കൾ - ശനി"
+    "Mon - Sat": "തിങ്കൾ - ശനി",
+    "book_appointment": "അപ്പോയിന്റ്മെന്റ് ബുക്ക് ചെയ്യുക",
+    "with_doctor": "കൂടെ",
+    "confirm_booking": "ബുക്കിംഗ് സ്ഥിരീകരിക്കുക",
+    "booking_confirmed": "ബുക്കിംഗ് സ്ഥിരീകരിച്ചു!",
+    "slot_confirmed_for": "നിങ്ങളുടെ സ്ലോട്ട് ഇതിനായി സ്ഥിരീകരിച്ചു",
+    "today": "ഇന്ന്.",
+    "join_video_call": "വീഡിയോ കോളിൽ ചേരുക"
   },
   "mr": {
     "welcome": "ग्रामीण आरोग्य कनेक्ट",
@@ -717,7 +745,14 @@ export const translations = {
     "location": "ठिकाण",
     "age": "वय",
     "Available Today": "आज उपलब्ध",
-    "Mon - Sat": "सोम - शनि"
+    "Mon - Sat": "सोम - शनि",
+    "book_appointment": "अपॉइंटमेंट बुक करा",
+    "with_doctor": "सोबत",
+    "confirm_booking": "बुकिंगची पुष्टी करा",
+    "booking_confirmed": "बुकिंग निश्चित झाले!",
+    "slot_confirmed_for": "तुमचा स्लॉट यासाठी निश्चित झाला आहे",
+    "today": "आज.",
+    "join_video_call": "व्हिडिओ कॉलमध्ये सामील व्हा"
   },
   "hi": {
     "welcome": "ग्रामीण स्वास्थ्य कनेक्ट",
@@ -861,6 +896,13 @@ export const translations = {
     "location": "स्थान",
     "age": "उम्र",
     "Available Today": "आज उपलब्ध",
-    "Mon - Sat": "सोम - शनि"
+    "Mon - Sat": "सोम - शनि",
+    "book_appointment": "अपॉइंटमेंट बुक करें",
+    "with_doctor": "के साथ",
+    "confirm_booking": "बुकिंग की पुष्टि करें",
+    "booking_confirmed": "बुकिंग पक्की हो गई!",
+    "slot_confirmed_for": "आपका स्लॉट इसके लिए पक्का हो गया है",
+    "today": "आज।",
+    "join_video_call": "वीडियो कॉल से जुड़ें"
   }
 };

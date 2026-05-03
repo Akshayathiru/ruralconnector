@@ -423,8 +423,8 @@ export default function HospitalsPage() {
           
           {bookingStatus === 'slot_selection' ? (
             <>
-              <h3>Book Appointment</h3>
-              <p className="modal-subtitle">with <strong>{bookingDoctor.name}</strong> ({bookingDoctor.specialty})</p>
+              <h3>{t.book_appointment || "Book Appointment"}</h3>
+              <p className="modal-subtitle">{t.with_doctor || "with"} <strong>{t[bookingDoctor.name] || bookingDoctor.name}</strong> ({t[bookingDoctor.specialty] || bookingDoctor.specialty})</p>
               <div className="slots-grid">
                 {["10:00 AM", "11:30 AM", "02:00 PM", "04:15 PM", "06:00 PM"].map(slot => (
                   <button 
@@ -441,16 +441,16 @@ export default function HospitalsPage() {
                 disabled={!selectedSlot}
                 onClick={() => setBookingStatus('confirmed')}
               >
-                Confirm Booking
+                {t.confirm_booking || "Confirm Booking"}
               </button>
             </>
           ) : (
             <div className="confirmation-success">
               <div className="success-icon">✅</div>
-              <h3>Booking Confirmed!</h3>
-              <p>Your slot is confirmed for <strong>{selectedSlot}</strong> today.</p>
+              <h3>{t.booking_confirmed || "Booking Confirmed!"}</h3>
+              <p>{t.slot_confirmed_for || "Your slot is confirmed for"} <strong>{selectedSlot}</strong> {t.today || "today."}</p>
               <button className="video-call-btn" onClick={() => navigate('/videocall', { state: { doctorName: bookingDoctor.name } })}>
-                📹 Join Video Call
+                📹 {t.join_video_call || "Join Video Call"}
               </button>
             </div>
           )}

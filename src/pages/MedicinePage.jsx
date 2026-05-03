@@ -34,7 +34,8 @@ export default function MedicinePage() {
 
   const filteredData = MOCK_MEDICINES.filter(med => {
     const pharmacy = MOCK_PHARMACIES.find(p => p.id === med.pharmacyId);
-    const matchesSearch = med.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const translatedName = t[med.name] || med.name;
+    const matchesSearch = translatedName.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesDistance = distanceFilter === 'any' || pharmacy.distanceValue <= parseInt(distanceFilter);
     return matchesSearch && matchesDistance;
   }).map(med => ({
@@ -70,24 +71,24 @@ export default function MedicinePage() {
             value={distanceFilter}
             onChange={(e) => setDistanceFilter(e.target.value)}
           >
-            <option value="any">Any Distance</option>
-            <option value="5">Within 5km</option>
-            <option value="15">Within 15km</option>
-            <option value="50">Within 50km</option>
+            <option value="any">{t.any_distance}</option>
+            <option value="5">{t.within_5km}</option>
+            <option value="15">{t.within_15km}</option>
+            <option value="50">{t.within_50km}</option>
           </select>
           <button className="apply-filters-btn">⚡ {t.apply_filters}</button>
         </div>
 
         <div className="results-header">
-          <h2>Results for: <span className="highlight-tag">{searchQuery || 'All Medicines'}</span></h2>
-          <span className="results-count">💊 {filteredData.length} Medicines found</span>
+          <h2>{t.results_for} <span className="highlight-tag">{searchQuery || t.all_medicines}</span></h2>
+          <span className="results-count">💊 {filteredData.length} {t.medicines_found}</span>
         </div>
 
         {/* Medicine List */}
         <div className="medicine-grid">
           {filteredData.length === 0 ? (
             <div className="empty-state">
-              <p>No medicines found matching your search.</p>
+              <p>{t.no_medicines}</p>
             </div>
           ) : (
             filteredData.map(med => (
@@ -97,17 +98,17 @@ export default function MedicinePage() {
                     <div className="pm-icon-box">💊</div>
                   </div>
                   <div className="pm-info">
-                    <h3>{med.name}</h3>
-                    <p className="pm-pharmacy">🏥 {med.pharmacy.name} • 📍 {med.pharmacy.location}</p>
+                    <h3>{t[med.name] || med.name}</h3>
+                    <p className="pm-pharmacy">🏥 {t[med.pharmacy.name] || med.pharmacy.name} • 📍 {t[med.pharmacy.location] || med.pharmacy.location}</p>
                     <div className="pm-tags">
-                      <span className="tag tag-soft-purple">{med.type}</span>
+                      <span className="tag tag-soft-purple">{t[med.type] || med.type}</span>
                       <span className={`tag ${med.inStock ? 'tag-soft-green' : 'tag-soft-red'}`}>
                         {med.inStock ? t.in_stock : t.out_of_stock}
                       </span>
                     </div>
                   </div>
                   <div className="pm-distance-badge">
-                    {med.pharmacy.distance} away
+                    {med.pharmacy.distance} {t.away_text}
                   </div>
                 </div>
                 
@@ -117,15 +118,15 @@ export default function MedicinePage() {
                   <div className="pm-stats">
                     <div className="stat">
                       <span className="stat-icon">📦</span>
-                      <div><strong>{med.qty}</strong><span>Units</span></div>
+                      <div><strong>{med.qty}</strong><span>{t.units}</span></div>
                     </div>
                     <div className="stat">
                       <span className="stat-icon">💰</span>
-                      <div><strong>{med.price}</strong><span>Price</span></div>
+                      <div><strong>{med.price}</strong><span>{t.price}</span></div>
                     </div>
                     <div className="stat">
                       <span className="stat-icon">⭐</span>
-                      <div><strong>{med.pharmacy.rating}</strong><span>Pharmacy Rating</span></div>
+                      <div><strong>{med.pharmacy.rating}</strong><span>{t.pharmacy_rating}</span></div>
                     </div>
                   </div>
                   <button className="pm-view-btn" disabled={!med.inStock}>

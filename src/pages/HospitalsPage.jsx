@@ -215,17 +215,17 @@ export default function HospitalsPage() {
       <div className="category-card" onClick={() => handleCategorySelect('location')}>
         <div className="icon-wrapper purple-glow">📍</div>
         <h3>{t.based_on_location}</h3>
-        <p>Find hospitals within 5km, 10km, etc.</p>
+        <p>{t["Find hospitals within 5km, 10km, etc."] || "Find hospitals within 5km, 10km, etc."}</p>
       </div>
       <div className="category-card" onClick={() => handleCategorySelect('symptoms')}>
         <div className="icon-wrapper purple-glow">🩺</div>
         <h3>{t.based_on_problems}</h3>
-        <p>Search by symptoms like Infertility, Fever, etc.</p>
+        <p>{t["Search by symptoms like Infertility, Fever, etc."] || "Search by symptoms like Infertility, Fever, etc."}</p>
       </div>
       <div className="category-card" onClick={() => handleCategorySelect('age')}>
         <div className="icon-wrapper purple-glow">👶</div>
         <h3>{t.based_on_age}</h3>
-        <p>Filter hospitals that treat babies, adults, etc.</p>
+        <p>{t["Filter hospitals that treat babies, adults, etc."] || "Filter hospitals that treat babies, adults, etc."}</p>
       </div>
     </div>
   );
@@ -257,12 +257,12 @@ export default function HospitalsPage() {
 
     return (
       <div className="sub-container animate-fade-in">
-        <h2 className="sub-title">Select your {category} preference:</h2>
+        <h2 className="sub-title">{t.select_pref ? t.select_pref.replace('{category}', t[category] || category) : `Select your ${category} preference:`}</h2>
         <div className="list-grid">
           {options.map((opt, i) => (
             <div key={i} className="list-item" onClick={() => handleFilterSelect(opt.value)}>
               <span className="list-icon">{opt.icon}</span>
-              <span className="list-label">{opt.label}</span>
+              <span className="list-label">{t[opt.label] || opt.label}</span>
               <span className="list-arrow">→</span>
             </div>
           ))}
@@ -280,15 +280,15 @@ export default function HospitalsPage() {
           <span className="search-icon">🔍</span>
           <input type="text" placeholder={t.search_hospital} />
         </div>
-        <select className="filter-select"><option>Speciality</option></select>
-        <select className="filter-select"><option>Distance</option></select>
-        <select className="filter-select"><option>Insurance</option></select>
+        <select className="filter-select"><option>{t.speciality || "Speciality"}</option></select>
+        <select className="filter-select"><option>{t.distance || "Distance"}</option></select>
+        <select className="filter-select"><option>{t.insurance || "Insurance"}</option></select>
         <button className="apply-filters-btn">⚡ {t.apply_filters}</button>
       </div>
 
       <div className="results-header">
-        <h2>Hospitals matching: <span className="highlight-tag">{filterValue} <span className="close-tag">✕</span></span></h2>
-        <span className="results-count">🏥 {filteredHospitals.length} Hospital(s) found</span>
+        <h2>{t.hospitals_matching || "Hospitals matching:"} <span className="highlight-tag">{t[filterValue] || filterValue} <span className="close-tag">✕</span></span></h2>
+        <span className="results-count">🏥 {filteredHospitals.length} {t.hospitals_found || "Hospital(s) found"}</span>
       </div>
 
       {filteredHospitals.length === 0 ? (
@@ -305,15 +305,15 @@ export default function HospitalsPage() {
                   <div className="ph-verified">✓</div>
                 </div>
                 <div className="ph-info">
-                  <h3>{h.name}</h3>
-                  <p className="ph-loc">📍 {h.location}</p>
+                  <h3>{t[h.name] || h.name}</h3>
+                  <p className="ph-loc">📍 {t[h.location] || h.location}</p>
                   <div className="ph-tags">
-                    {h.symptoms.slice(0,2).map(s => <span key={s} className="tag tag-soft-purple">{s}</span>)}
-                    {h.ages.slice(0,1).map(a => <span key={a} className="tag tag-soft-green">{a}</span>)}
+                    {h.symptoms.slice(0,2).map(s => <span key={s} className="tag tag-soft-purple">{t[s] || s}</span>)}
+                    {h.ages.slice(0,1).map(a => <span key={a} className="tag tag-soft-green">{t[a] || a}</span>)}
                   </div>
                 </div>
                 <div className="ph-distance-badge">
-                  {h.distance} away
+                  {h.distance} {t.away_text || "away"}
                 </div>
               </div>
               
@@ -323,19 +323,19 @@ export default function HospitalsPage() {
                 <div className="ph-stats">
                   <div className="stat">
                     <span className="stat-icon">⏰</span>
-                    <div><strong>24/7</strong><span>Emergency</span></div>
+                    <div><strong>24/7</strong><span>{t.emergency || "Emergency"}</span></div>
                   </div>
                   <div className="stat">
                     <span className="stat-icon">👨‍⚕️</span>
-                    <div><strong>{h.doctorsCount}</strong><span>Doctors</span></div>
+                    <div><strong>{h.doctorsCount}</strong><span>{t.doctors || "Doctors"}</span></div>
                   </div>
                   <div className="stat">
                     <span className="stat-icon">⭐</span>
-                    <div><strong>{h.rating}</strong><span>Patient Rating</span></div>
+                    <div><strong>{h.rating}</strong><span>{t.patient_rating || "Patient Rating"}</span></div>
                   </div>
                   <div className="stat">
                     <span className="stat-icon">🛡️</span>
-                    <div><strong>{h.insurance}</strong><span>Insurance</span></div>
+                    <div><strong>{t[h.insurance] || h.insurance}</strong><span>{t.insurance || "Insurance"}</span></div>
                   </div>
                 </div>
                 <button className="ph-view-btn" onClick={() => handleHospitalSelect(h)}>
@@ -364,9 +364,9 @@ export default function HospitalsPage() {
         <div className="dd-graphic">
           <div className="dd-graphic-card">
             <div className="dd-stat">
-              <span>Available Today</span>
+              <span>{t["Available Today"] || "Available Today"}</span>
               <strong>{filteredDoctors.filter(d => d.available).length}</strong>
-              <small>Doctors</small>
+              <small>{t.doctors || "Doctors"}</small>
             </div>
             <div className="dd-circle">33%</div>
           </div>
@@ -382,15 +382,15 @@ export default function HospitalsPage() {
             </div>
             
             <div className="pd-info">
-              <h4>{doc.name} {doc.available ? <span className="verified-badge">✓</span> : <span className="unverified-badge">✕</span>}</h4>
-              <p>🩺 {doc.specialty}</p>
-              <p>🏥 {selectedHospital.name}</p>
+              <h4>{t[doc.name] || doc.name} {doc.available ? <span className="verified-badge">✓</span> : <span className="unverified-badge">✕</span>}</h4>
+              <p>🩺 {t[doc.specialty] || doc.specialty}</p>
+              <p>🏥 {t[selectedHospital.name] || selectedHospital.name}</p>
             </div>
             
             <div className="pd-schedule">
               <p>⏰ {doc.time}</p>
-              <p>📍 {selectedHospital.distance} away</p>
-              <p>📅 Mon - Sat</p>
+              <p>📍 {selectedHospital.distance} {t.away_text || "away"}</p>
+              <p>📅 {t["Mon - Sat"] || "Mon - Sat"}</p>
             </div>
             
             <div className="pd-action">

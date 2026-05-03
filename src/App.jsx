@@ -23,6 +23,8 @@ import VideoCallPage from './pages/VideoCallPage'
 import MedicinePage from './pages/MedicinePage'
 import LanguageSelectionPage from './pages/LanguageSelectionPage'
 import VoicePage from './pages/VoicePage'
+import AshaPortalPage from './pages/AshaPortalPage'
+import AdminDashboardPage from './pages/AdminDashboardPage'
 
 function App() {
   return (
@@ -42,6 +44,8 @@ function App() {
           <Route path="/videocall" element={<VideoCallPage />} />
           <Route path="/medicine" element={<MedicinePage />} />
           <Route path="/voice" element={<VoicePage />} />
+          <Route path="/asha" element={<AshaPortalPage />} />
+          <Route path="/admin-dashboard" element={<AdminDashboardPage />} />
         </Routes>
       </div>
     </BrowserRouter>

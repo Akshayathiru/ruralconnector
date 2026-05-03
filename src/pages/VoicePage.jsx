@@ -14,18 +14,57 @@ function VoicePage() {
   const [input, setInput] = useState('')
   const chatEndRef = useRef(null)
 
+  const [isListening, setIsListening] = useState(false)
+  const [supported, setSupported] = useState(true)
+  const recognitionRef = useRef(null)
+
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+    if (!SpeechRecognition) {
+      setSupported(false)
+    }
+  }, [])
+
+  const startListening = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+    if (!SpeechRecognition) return
+
+    const recognition = new SpeechRecognition()
+    recognition.lang = lang === 'en' ? 'en-IN' : lang + '-IN'
+    recognition.continuous = false
+    recognition.interimResults = false
+
+    recognition.onresult = (event) => {
+      const text = event.results[0][0].transcript
+      setIsListening(false)
+      processMessage(text)
+    }
+
+    recognition.onerror = (event) => {
+      setIsListening(false)
+      if (event.error === 'not-allowed') {
+        alert("Microphone access is blocked! Please click the microphone icon in your browser's address bar (top right) and select 'Allow'.")
+      } else {
+        alert("Microphone error: " + event.error)
+      }
+    }
+    recognition.onend = () => setIsListening(false)
+
+    recognitionRef.current = recognition
+    recognition.start()
+    setIsListening(true)
+  }
+
   // Scroll to bottom when messages change
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  const handleSend = () => {
-    if (!input.trim()) return
+  const processMessage = (userText) => {
+    if (!userText.trim()) return
     
     // Add user message
-    const userMessage = input.trim()
-    setMessages(prev => [...prev, { text: userMessage, sender: 'user' }])
-    setInput('')
+    setMessages(prev => [...prev, { text: userText, sender: 'user' }])
 
     // Bot response logic
     setTimeout(() => {
@@ -51,6 +90,11 @@ function VoicePage() {
         setMessages(prev => [...prev, { text: "Your message has been recorded. A health worker will contact you soon.", sender: 'bot' }])
       }
     }, 600)
+  }
+
+  const handleSend = () => {
+    processMessage(input)
+    setInput('')
   }
 
   return (
@@ -87,7 +131,24 @@ function VoicePage() {
       </div>
 
       {/* CHAT INPUT */}
-      <div style={{ padding: '16px', background: 'var(--white)', borderTop: '1px solid #e5e7eb', display: 'flex', gap: '10px', width: '100%', boxSizing: 'border-box' }}>
+      <div style={{ padding: '16px', background: 'var(--white)', borderTop: '1px solid #e5e7eb', display: 'flex', gap: '10px', width: '100%', boxSizing: 'border-box', alignItems: 'center' }}>
+        
+        {supported && (
+          <button 
+            onClick={isListening ? () => recognitionRef.current?.stop() : startListening}
+            style={{ 
+              width: '44px', height: '44px', borderRadius: '50%', border: 'none', 
+              background: isListening ? '#ef4444' : 'var(--green-soft)', 
+              color: isListening ? '#fff' : 'var(--green)', 
+              fontSize: '1.2rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexShrink: 0
+            }}
+            title="Speak your problem"
+          >
+            {isListening ? '⏹' : '🎤'}
+          </button>
+        )}
+
         <input 
           type="text" 
           value={input}

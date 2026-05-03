@@ -39,7 +39,7 @@ function HomePage() {
             <span className="nav-icon">💊</span>
             {t.medicine}
           </a>
-          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); alert('Coming soon!'); }}>
+          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/asha'); }}>
             <span className="nav-icon">🩺</span>
             {t.asha}
           </a>

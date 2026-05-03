@@ -4,7 +4,7 @@ import './HospitalsPage.css';
 import { translations } from '../translations';
 
 // --- EXPANDED MOCK DATA ---
-const MOCK_HOSPITALS = [
+export const MOCK_HOSPITALS = [
   {
     id: 1,
     name: "City Care Hospital",
@@ -134,6 +134,25 @@ export default function HospitalsPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // --- HELPER TO GET LIVE DATA ---
+  const getLiveHospitals = () => {
+    return MOCK_HOSPITALS.map(h => {
+      const saved = localStorage.getItem(`hospital_admin_${h.id}`);
+      if (saved) {
+        const adminData = JSON.parse(saved);
+        return {
+          ...h,
+          doctorsCount: adminData.doctorsAvailable,
+          isOpen: adminData.isOpen,
+          emergencyActive: adminData.emergencyAvailable,
+          announcement: adminData.announcement
+        };
+      }
+      return { ...h, isOpen: true, emergencyActive: true }; // defaults
+    });
+  };
+
+  const liveHospitals = getLiveHospitals();
   
   const [lang] = useState(localStorage.getItem('userLanguage') || 'en');
   const t = translations[lang] || translations.en;
@@ -189,11 +208,11 @@ export default function HospitalsPage() {
   if (view === 'hospitals') {
     if (category === 'location') {
       const maxDist = parseInt(filterValue); 
-      filteredHospitals = MOCK_HOSPITALS.filter(h => h.distanceValue <= maxDist);
+      filteredHospitals = liveHospitals.filter(h => h.distanceValue <= maxDist);
     } else if (category === 'symptoms') {
-      filteredHospitals = MOCK_HOSPITALS.filter(h => h.symptoms.includes(filterValue));
+      filteredHospitals = liveHospitals.filter(h => h.symptoms.includes(filterValue));
     } else if (category === 'age') {
-      filteredHospitals = MOCK_HOSPITALS.filter(h => h.ages.includes(filterValue));
+      filteredHospitals = liveHospitals.filter(h => h.ages.includes(filterValue));
     }
   }
 
@@ -300,7 +319,12 @@ export default function HospitalsPage() {
       ) : (
         <div className="hospital-cards-vertical">
           {filteredHospitals.map(h => (
-            <div key={h.id} className="premium-hospital-card">
+            <div key={h.id} className={`premium-hospital-card ${!h.isOpen ? 'hospital-closed' : ''}`} style={{ opacity: h.isOpen ? 1 : 0.75 }}>
+              {!h.isOpen && (
+                <div style={{ position: 'absolute', top: 10, right: 10, background: '#ef4444', color: '#fff', padding: '4px 12px', fontSize: '0.7rem', fontWeight: 'bold', borderRadius: '12px', zIndex: 5 }}>
+                  CLOSED / FULL
+                </div>
+              )}
               <div className="ph-top">
                 <div className="ph-icon-area">
                   <div className="ph-icon-box">{h.image}</div>
@@ -340,8 +364,16 @@ export default function HospitalsPage() {
                     <div><strong>{t[h.insurance] || h.insurance}</strong><span>{t.insurance || "Insurance"}</span></div>
                   </div>
                 </div>
-                <button className="ph-view-btn" onClick={() => handleHospitalSelect(h)}>
-                  {t.view_doctors} →
+
+                {h.announcement && (
+                  <div style={{ marginTop: '12px', padding: '10px 14px', background: 'var(--warning-soft)', borderRadius: '12px', border: '1px solid #fcd34d', fontSize: '0.8rem', color: '#92400e', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{fontSize: '1.2rem'}}>📢</span>
+                    <span>{h.announcement}</span>
+                  </div>
+                )}
+
+                <button className="ph-view-btn" onClick={() => handleHospitalSelect(h)} disabled={!h.isOpen}>
+                  {h.isOpen ? (t.view_doctors + " →") : "Unavailable"}
                 </button>
               </div>
             </div>

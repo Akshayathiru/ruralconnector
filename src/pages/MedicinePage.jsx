@@ -60,7 +60,7 @@ export default function MedicinePage() {
             <span className="search-icon">🔍</span>
             <input 
               type="text" 
-              placeholder="Search for tablets (e.g., Paracetamol)..." 
+              placeholder={t.search_medicine} 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -102,7 +102,7 @@ export default function MedicinePage() {
                     <div className="pm-tags">
                       <span className="tag tag-soft-purple">{med.type}</span>
                       <span className={`tag ${med.inStock ? 'tag-soft-green' : 'tag-soft-red'}`}>
-                        {med.inStock ? 'In Stock' : 'Out of Stock'}
+                        {med.inStock ? t.in_stock : t.out_of_stock}
                       </span>
                     </div>
                   </div>
@@ -129,7 +129,7 @@ export default function MedicinePage() {
                     </div>
                   </div>
                   <button className="pm-view-btn" disabled={!med.inStock}>
-                    {med.inStock ? 'Order Now →' : 'Out of Stock'}
+                    {med.inStock ? `${t.order_now} →` : t.out_of_stock}
                   </button>
                 </div>
               </div>

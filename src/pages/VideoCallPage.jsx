@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './VideoCallPage.css';
+import { translations } from '../translations';
 
 export default function VideoCallPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const doctorName = location.state?.doctorName || "Doctor"; // Fallback if no state
+
+  const [lang] = useState(localStorage.getItem('userLanguage') || 'en');
+  const t = translations[lang] || translations.en;
 
   const [isMuted, setIsMuted] = useState(false);
   const [isVideoOff, setIsVideoOff] = useState(false);
@@ -80,7 +84,7 @@ export default function VideoCallPage() {
         {isConnecting ? (
           <div className="connecting-overlay">
             <div className="spinner"></div>
-            <h2>Connecting to {doctorName}...</h2>
+            <h2>{t.connecting_to} {doctorName}...</h2>
             <p>Please wait while we establish a secure connection.</p>
           </div>
         ) : (

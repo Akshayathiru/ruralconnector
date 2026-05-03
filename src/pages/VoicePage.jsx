@@ -100,7 +100,7 @@ function VoicePage() {
         <>
           {/* Language Selector */}
           <div className="lang-wrap">
-            <label className="lang-label">Choose your language:</label>
+            <label className="lang-label">{t.choose_lang}</label>
             <select
               className="lang-select"
               value={language}
@@ -121,7 +121,7 @@ function VoicePage() {
             >
               <span className="mic-icon">{isListening ? '⏹' : '🎤'}</span>
               <span className="mic-label">
-                {isListening ? 'Listening... (tap to stop)' : 'Tap to Speak'}
+                {isListening ? t.listening : t.tap_to_speak}
               </span>
             </button>
 
@@ -137,13 +137,13 @@ function VoicePage() {
           {/* Transcript Result */}
           {transcript && (
             <div className="transcript-card">
-              <p className="transcript-label">You said:</p>
+              <p className="transcript-label">{t.you_said}</p>
               <p className="transcript-text">"{transcript}"</p>
               <p className="transcript-advice">
                 ✅ Your message has been recorded. A health worker will contact you soon.
               </p>
               <button className="reset-btn" onClick={() => setTranscript('')}>
-                🎤 Speak Again
+                🎤 {t.speak_again}
               </button>
             </div>
           )}

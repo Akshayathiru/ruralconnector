@@ -77,7 +77,7 @@ const DOCTORS = [
 // A small component for ONE doctor's card.
 // Receives doctor data as props.
 // ──────────────────────────────────────────────────────────────────────────
-function DoctorCard({ doctor }) {
+function DoctorCard({ doctor, t }) {
   // Get first letter of the doctor's first name for the avatar circle
   // "Dr. Priya" → split by space → ["Dr.", "Priya"] → index [1] → "P"
   const initial = doctor.name.split(' ')[1]?.[0] ?? 'D'
@@ -101,8 +101,8 @@ function DoctorCard({ doctor }) {
       <div className="card-status">
         {/* 📚 Ternary operator:  condition ? valueIfTrue : valueIfFalse */}
         {doctor.available
-          ? <span className="badge badge-green">✓ Available</span>
-          : <span className="badge badge-red">✗ Away</span>
+          ? <span className="badge badge-green">✓ {t.available}</span>
+          : <span className="badge badge-red">✗ {t.away}</span>
         }
       </div>
 
@@ -143,9 +143,9 @@ function DoctorPage() {
       {/* ── HEADER ── */}
       <div className="page-header">
         <span className="page-icon">🟢</span>
-        <h1 className="page-title">Doctor Availability</h1>
+        <h1 className="page-title">{t.doctor_avail_title}</h1>
         <p className="page-sub">
-          Find doctors available near your village — updated daily
+          {t.doctor_avail_sub}
         </p>
       </div>
 
@@ -161,14 +161,14 @@ function DoctorPage() {
           className={`tab ${filter === 'all' ? 'tab-active' : ''}`}
           onClick={() => setFilter('all')}
         >
-          All Doctors ({DOCTORS.length})
+          {t.all_doctors} ({DOCTORS.length})
         </button>
         <button
           id="filter-available"
           className={`tab ${filter === 'available' ? 'tab-active' : ''}`}
           onClick={() => setFilter('available')}
         >
-          ✓ Available Now ({availableCount})
+          ✓ {t.available_now} ({availableCount})
         </button>
       </div>
 
@@ -178,7 +178,7 @@ function DoctorPage() {
                 For each doctor object, we return a DoctorCard.
                 key={doctor.id} is required — React uses it to track the list. */}
         {visibleDoctors.map(doctor => (
-          <DoctorCard key={doctor.id} doctor={doctor} />
+          <DoctorCard key={doctor.id} doctor={doctor} t={t} />
         ))}
       </div>
 

@@ -214,17 +214,17 @@ export default function HospitalsPage() {
     <div className="grid-container animate-fade-in">
       <div className="category-card" onClick={() => handleCategorySelect('location')}>
         <div className="icon-wrapper purple-glow">📍</div>
-        <h3>Based on Location</h3>
+        <h3>{t.based_on_location}</h3>
         <p>Find hospitals within 5km, 10km, etc.</p>
       </div>
       <div className="category-card" onClick={() => handleCategorySelect('symptoms')}>
         <div className="icon-wrapper purple-glow">🩺</div>
-        <h3>Based on Problems</h3>
+        <h3>{t.based_on_problems}</h3>
         <p>Search by symptoms like Infertility, Fever, etc.</p>
       </div>
       <div className="category-card" onClick={() => handleCategorySelect('age')}>
         <div className="icon-wrapper purple-glow">👶</div>
-        <h3>Based on Age</h3>
+        <h3>{t.based_on_age}</h3>
         <p>Filter hospitals that treat babies, adults, etc.</p>
       </div>
     </div>
@@ -278,7 +278,7 @@ export default function HospitalsPage() {
       <div className="filter-bar">
         <div className="search-input-wrapper">
           <span className="search-icon">🔍</span>
-          <input type="text" placeholder="Search by hospital name, speciality..." />
+          <input type="text" placeholder={t.search_hospital} />
         </div>
         <select className="filter-select"><option>Speciality</option></select>
         <select className="filter-select"><option>Distance</option></select>
@@ -339,7 +339,7 @@ export default function HospitalsPage() {
                   </div>
                 </div>
                 <button className="ph-view-btn" onClick={() => handleHospitalSelect(h)}>
-                  View Doctors →
+                  {t.view_doctors} →
                 </button>
               </div>
             </div>
@@ -354,11 +354,11 @@ export default function HospitalsPage() {
       {/* Dashboard Style Header */}
       <div className="detail-dashboard-header">
         <div className="dd-text">
-          <h2>Doctor Availability</h2>
-          <p>Find doctors available near your village — updated daily</p>
+          <h2>{t.doctor_avail_title}</h2>
+          <p>{t.doctor_avail_sub}</p>
           <div className="dd-tabs">
-            <button className="dd-tab active">👥 All Doctors ({filteredDoctors.length})</button>
-            <button className="dd-tab">✅ Available Now ({filteredDoctors.filter(d => d.available).length})</button>
+            <button className="dd-tab active">👥 {t.all_doctors} ({filteredDoctors.length})</button>
+            <button className="dd-tab">✅ {t.available_now} ({filteredDoctors.filter(d => d.available).length})</button>
           </div>
         </div>
         <div className="dd-graphic">
@@ -395,15 +395,15 @@ export default function HospitalsPage() {
             
             <div className="pd-action">
               {doc.available 
-                ? <span className="pd-status status-green">● Available</span>
-                : <span className="pd-status status-red">● Away</span>
+                ? <span className="pd-status status-green">● {t.available}</span>
+                : <span className="pd-status status-red">● {t.away}</span>
               }
               <button 
                 className="pd-book-btn" 
                 disabled={!doc.available} 
                 onClick={() => openBooking(doc)}
               >
-                Book Slot 〉
+                {t.book_slot} 〉
               </button>
             </div>
             <button className="pd-menu">⋮</button>

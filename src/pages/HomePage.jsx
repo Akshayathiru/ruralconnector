@@ -115,7 +115,7 @@ function HomePage() {
             </div>
             <div className="hero-right">
               <div className="clinic-card">
-                <img src="/clinic.png" alt="Clinic 3D Illustration" className="clinic-image" />
+                <img src="/rural_clinic.png" alt="Rural Indian Healthcare Center" className="clinic-image" />
                 <div className="clinic-status">
                   <div className="status-header">
                     <span className="status-dot"></span> System Online

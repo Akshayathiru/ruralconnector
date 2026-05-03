@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './HospitalsPage.css';
 import { translations } from '../translations';
 
@@ -132,16 +132,18 @@ const MOCK_DOCTORS = [
 
 export default function HospitalsPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+
   
   const [lang] = useState(localStorage.getItem('userLanguage') || 'en');
   const t = translations[lang] || translations.en;
 
   // State for navigation flow
-  const [view, setView] = useState('categories');
+  const [view, setView] = useState(location.state?.autoView || 'categories');
   
   // Selections
-  const [category, setCategory] = useState(null); 
-  const [filterValue, setFilterValue] = useState(null); 
+  const [category, setCategory] = useState(location.state?.autoCategory || null); 
+  const [filterValue, setFilterValue] = useState(location.state?.autoFilter || null); 
   const [selectedHospital, setSelectedHospital] = useState(null);
   
   // Search state for doctors
@@ -306,7 +308,7 @@ export default function HospitalsPage() {
                 </div>
                 <div className="ph-info">
                   <h3>{t[h.name] || h.name}</h3>
-                  <p className="ph-loc">📍 {t[h.location] || h.location}</p>
+                  <p className="ph-loc">📍 {t[h.location] || h.location} &nbsp; | &nbsp; 📞 +91 98765 4321{h.id}</p>
                   <div className="ph-tags">
                     {h.symptoms.slice(0,2).map(s => <span key={s} className="tag tag-soft-purple">{t[s] || s}</span>)}
                     {h.ages.slice(0,1).map(a => <span key={a} className="tag tag-soft-green">{t[a] || a}</span>)}

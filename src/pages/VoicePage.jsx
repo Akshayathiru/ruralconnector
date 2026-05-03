@@ -58,6 +58,18 @@ function VoicePage() {
       const text = event.results[0][0].transcript
       setTranscript(text)
       setIsListening(false)
+
+      const lowerText = text.toLowerCase()
+      // Keywords for Fever in English, Hindi, Tamil, Telugu, Malayalam, Marathi
+      if (lowerText.includes('fever') || lowerText.includes('hospital') || lowerText.includes('జ్వరం') || lowerText.includes('కாய்ச்சல்') || lowerText.includes('പനി') || lowerText.includes('ताप') || lowerText.includes('बुखार')) {
+        setTimeout(() => {
+          navigate('/hospitals', { state: { autoFilter: 'Fever', autoCategory: 'symptoms', autoView: 'hospitals' } })
+        }, 1500)
+      } else if (lowerText.includes('medicine') || lowerText.includes('paracetamol')) {
+        setTimeout(() => {
+          navigate('/medicine')
+        }, 1500)
+      }
     }
 
     recognition.onerror = () => setIsListening(false)
@@ -140,7 +152,13 @@ function VoicePage() {
               <p className="transcript-label">{t.you_said}</p>
               <p className="transcript-text">"{transcript}"</p>
               <p className="transcript-advice">
-                ✅ Your message has been recorded. A health worker will contact you soon.
+                ✅ {(() => {
+                     const lower = transcript.toLowerCase();
+                     if (lower.includes('fever') || lower.includes('hospital') || lower.includes('జ్వరం') || lower.includes('కாய்ச்சல்') || lower.includes('പനി') || lower.includes('ताप') || lower.includes('बुखार')) {
+                       return "Analyzing symptoms... redirecting to nearby hospitals.";
+                     }
+                     return "Your message has been recorded. A health worker will contact you soon.";
+                   })()}
               </p>
               <button className="reset-btn" onClick={() => setTranscript('')}>
                 🎤 {t.speak_again}

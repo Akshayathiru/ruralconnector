@@ -111,7 +111,7 @@ export const MOCK_HOSPITALS = [
   }
 ];
 
-const MOCK_DOCTORS = [
+export const MOCK_DOCTORS = [
   { id: 101, hospitalId: 1, name: "Dr. Raj Kumar", specialty: "General Physician", tags: ["fever", "cough", "general"], available: true, experience: "15 yrs", rating: "4.9", time: "09:00 AM - 04:00 PM" },
   { id: 102, hospitalId: 1, name: "Dr. Anitha", specialty: "Cardiologist", tags: ["heart", "chest pain"], available: false, experience: "10 yrs", rating: "4.7", time: "Not available today" },
   { id: 113, hospitalId: 1, name: "Dr. Suresh Reddy", specialty: "Orthopedic", tags: ["bones", "joints"], available: true, experience: "12 yrs", rating: "4.8", time: "10:00 AM - 02:00 PM" },
@@ -218,7 +218,16 @@ export default function HospitalsPage() {
 
   let filteredDoctors = [];
   if (view === 'hospital_detail' && selectedHospital) {
-    let docs = MOCK_DOCTORS.filter(d => d.hospitalId === selectedHospital.id);
+    const saved = localStorage.getItem(`hospital_admin_${selectedHospital.id}`);
+    const overrides = saved ? JSON.parse(saved).doctorOverrides : {};
+
+    let docs = MOCK_DOCTORS.filter(d => d.hospitalId === selectedHospital.id).map(d => {
+      if (overrides && overrides.hasOwnProperty(d.id)) {
+        return { ...d, available: overrides[d.id] };
+      }
+      return d;
+    });
+
     if (doctorSearchQuery.trim() !== '') {
       const q = doctorSearchQuery.toLowerCase();
       docs = docs.filter(d => 

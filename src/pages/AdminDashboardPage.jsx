@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { MOCK_DOCTORS } from './HospitalsPage';
 import './PageStyles.css';
 
 function AdminDashboardPage() {
@@ -16,20 +17,37 @@ function AdminDashboardPage() {
 
   if (!hospital) return null;
 
-  // We store updates in localStorage to persist them
-  // Key format: `hospital_admin_${hospital.id}`
+  const myDoctors = MOCK_DOCTORS.filter(d => d.hospitalId === hospital.id);
   const storageKey = `hospital_admin_${hospital.id}`;
-  
+
   const [data, setData] = useState(() => {
     const saved = localStorage.getItem(storageKey);
     if (saved) return JSON.parse(saved);
+
+    // Initial overrides based on mock data
+    const initialOverrides = {};
+    myDoctors.forEach(d => {
+      initialOverrides[d.id] = d.available;
+    });
+
     return {
       isOpen: true,
       doctorsAvailable: hospital.doctorsCount,
       emergencyAvailable: true,
-      announcement: ''
+      announcement: '',
+      doctorOverrides: initialOverrides
     };
   });
+
+  const toggleDoctor = (id) => {
+    setData({
+      ...data,
+      doctorOverrides: {
+        ...data.doctorOverrides,
+        [id]: !data.doctorOverrides[id]
+      }
+    });
+  };
 
   const handleSave = () => {
     localStorage.setItem(storageKey, JSON.stringify(data));
@@ -91,6 +109,35 @@ function AdminDashboardPage() {
             placeholder="e.g. Vaccine drive tomorrow..."
             style={{ minHeight: '80px', resize: 'vertical' }}
           />
+        </div>
+
+        <div style={{ marginBottom: '30px' }}>
+          <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '15px', color: '#374151', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>Manage Doctor Availability</label>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {myDoctors.map(doc => (
+              <div key={doc.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px', background: '#f9fafb', borderRadius: '10px' }}>
+                <div>
+                  <p style={{ margin: 0, fontWeight: 'bold', fontSize: '0.9rem' }}>{doc.name}</p>
+                  <p style={{ margin: 0, fontSize: '0.75rem', color: '#666' }}>{doc.specialty}</p>
+                </div>
+                <button 
+                  onClick={() => toggleDoctor(doc.id)}
+                  style={{ 
+                    padding: '6px 12px', 
+                    borderRadius: '8px', 
+                    border: 'none', 
+                    background: data.doctorOverrides[doc.id] ? '#dcfce7' : '#fee2e2',
+                    color: data.doctorOverrides[doc.id] ? '#16a34a' : '#dc2626',
+                    fontSize: '0.75rem',
+                    fontWeight: 'bold',
+                    cursor: 'pointer'
+                  }}
+                >
+                  {data.doctorOverrides[doc.id] ? 'Available' : 'Away'}
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
 
         <button className="primary-action-btn" onClick={handleSave} style={{ margin: 0 }}>

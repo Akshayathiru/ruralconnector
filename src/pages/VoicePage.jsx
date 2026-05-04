@@ -13,7 +13,9 @@ function VoicePage() {
   ])
   const [input, setInput] = useState('')
   const chatEndRef = useRef(null)
+  const inputRef = useRef(null)
 
+  const [permissionDenied, setPermissionDenied] = useState(false)
   const [isListening, setIsListening] = useState(false)
   const [supported, setSupported] = useState(true)
   const recognitionRef = useRef(null)
@@ -23,6 +25,8 @@ function VoicePage() {
     if (!SpeechRecognition) {
       setSupported(false)
     }
+    // Focus input on mount
+    inputRef.current?.focus()
   }, [])
 
   const startListening = () => {
@@ -38,17 +42,22 @@ function VoicePage() {
       const text = event.results[0][0].transcript
       setIsListening(false)
       processMessage(text)
+      inputRef.current?.focus()
     }
 
     recognition.onerror = (event) => {
       setIsListening(false)
+      inputRef.current?.focus()
       if (event.error === 'not-allowed') {
-        alert("Microphone access is blocked! Please click the microphone icon in your browser's address bar (top right) and select 'Allow'.")
+        setPermissionDenied(true)
       } else {
         alert("Microphone error: " + event.error)
       }
     }
-    recognition.onend = () => setIsListening(false)
+    recognition.onend = () => {
+      setIsListening(false)
+      inputRef.current?.focus()
+    }
 
     recognitionRef.current = recognition
     recognition.start()
@@ -68,9 +77,9 @@ function VoicePage() {
 
     // Bot response logic
     setTimeout(() => {
-      const lowerText = userMessage.toLowerCase()
+      const lowerText = userText.toLowerCase()
       
-      if (lowerText.includes('fever') || lowerText.includes('hospital') || lowerText.includes('జ్వరం') || lowerText.includes('కாய்ச்சல்') || lowerText.includes('പനി') || lowerText.includes('ताप') || lowerText.includes('बुखार')) {
+      if (lowerText.includes('fever') || lowerText.includes('hospital') || lowerText.includes('జ్వరం') || lowerText.includes('కாய்ச்சల్') || lowerText.includes('പനി') || lowerText.includes('ताप') || lowerText.includes('बुखार')) {
         
         setMessages(prev => [...prev, { text: "I understand you have a fever. Finding nearby hospitals that treat fever...", sender: 'bot' }])
         
@@ -95,6 +104,7 @@ function VoicePage() {
   const handleSend = () => {
     processMessage(input)
     setInput('')
+    setTimeout(() => inputRef.current?.focus(), 0)
   }
 
   return (
@@ -130,9 +140,22 @@ function VoicePage() {
         <div ref={chatEndRef} />
       </div>
 
+      {permissionDenied && (
+        <div style={{ padding: '15px', background: '#fee2e2', color: '#b91c1c', fontSize: '0.85rem', textAlign: 'center', borderTop: '1px solid #fecaca' }}>
+          <strong>Microphone Blocked!</strong> To speak, click the camera/mic icon in the browser address bar (top right) and select "Always allow".
+          <button onClick={() => setPermissionDenied(false)} style={{ marginLeft: '10px', background: 'none', border: '1px solid #b91c1c', borderRadius: '4px', padding: '2px 8px', color: '#b91c1c', cursor: 'pointer' }}>Dismiss</button>
+        </div>
+      )}
+
       {/* CHAT INPUT */}
       <div style={{ padding: '16px', background: 'var(--white)', borderTop: '1px solid #e5e7eb', display: 'flex', gap: '10px', width: '100%', boxSizing: 'border-box', alignItems: 'center' }}>
         
+        {!supported && (
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', flex: 1 }}>
+            Voice chat is best supported on Chrome/Edge.
+          </div>
+        )}
+
         {supported && (
           <button 
             onClick={isListening ? () => recognitionRef.current?.stop() : startListening}
@@ -150,11 +173,13 @@ function VoicePage() {
         )}
 
         <input 
+          ref={inputRef}
           type="text" 
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && handleSend()}
           placeholder="Type your symptoms here..."
+          autoFocus
           style={{ flex: 1, padding: '12px 16px', borderRadius: '24px', border: '1px solid #e5e7eb', outline: 'none', fontSize: '0.95rem' }}
         />
         <button 

@@ -9,7 +9,7 @@ function VoicePage() {
   const t = translations[lang] || translations.en
 
   const [messages, setMessages] = useState([
-    { text: "Hello! I am your rural health assistant. Please tell me your symptoms or what you need help with today.", sender: 'bot' }
+    { text: t.bot_greeting, sender: 'bot' }
   ])
   const [input, setInput] = useState('')
   const chatEndRef = useRef(null)
@@ -79,9 +79,9 @@ function VoicePage() {
     setTimeout(() => {
       const lowerText = userText.toLowerCase()
       
-      if (lowerText.includes('fever') || lowerText.includes('hospital') || lowerText.includes('జ్వరం') || lowerText.includes('కாய்ச்சల్') || lowerText.includes('പനി') || lowerText.includes('ताप') || lowerText.includes('बुखार')) {
+      if (lowerText.includes('fever') || lowerText.includes('hospital') || lowerText.includes('జ్వరం') || lowerText.includes('కாய்ச்சல்') || lowerText.includes('పനി') || lowerText.includes('ताप') || lowerText.includes('बुखार')) {
         
-        setMessages(prev => [...prev, { text: "I understand you have a fever. Finding nearby hospitals that treat fever...", sender: 'bot' }])
+        setMessages(prev => [...prev, { text: t.bot_fever, sender: 'bot' }])
         
         setTimeout(() => {
           navigate('/hospitals', { state: { autoFilter: 'Fever', autoCategory: 'symptoms', autoView: 'hospitals' } })
@@ -89,14 +89,14 @@ function VoicePage() {
         
       } else if (lowerText.includes('medicine') || lowerText.includes('paracetamol')) {
         
-        setMessages(prev => [...prev, { text: "Checking local pharmacy stock for your medicine...", sender: 'bot' }])
+        setMessages(prev => [...prev, { text: t.bot_medicine, sender: 'bot' }])
         
         setTimeout(() => {
           navigate('/medicine')
         }, 2000)
         
       } else {
-        setMessages(prev => [...prev, { text: "Your message has been recorded. A health worker will contact you soon.", sender: 'bot' }])
+        setMessages(prev => [...prev, { text: t.bot_default, sender: 'bot' }])
       }
     }, 600)
   }

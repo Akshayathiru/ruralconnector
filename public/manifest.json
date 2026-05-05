@@ -1,0 +1,16 @@
+{
+  "name": "Rural Healthcare Connect",
+  "short_name": "RuralHealth",
+  "description": "Healthcare at your fingertips for rural areas. Works offline and on slow connections.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f0fdf9",
+  "theme_color": "#0d9488",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

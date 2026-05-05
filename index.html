@@ -8,10 +8,24 @@
     <title>Rural Healthcare Connect</title>
     <!-- Google Fonts: loads beautiful modern fonts from the internet -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#0d9488" />
   </head>
   <body>
     <!-- This div with id="root" is where React will inject/render all our content -->
     <div id="root"></div>
+    
+    <!-- Registration script for Service Worker -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('Service Worker registered!', reg))
+            .catch(err => console.log('Service Worker registration failed:', err));
+        });
+      }
+    </script>
+
     <!-- This script tag loads our React app's entry point -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
